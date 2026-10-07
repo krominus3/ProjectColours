@@ -16,6 +16,17 @@ public class PlayerCameraControl : MonoBehaviour
 
     private float _xRotation = 0f;
 
+    private void Awake()
+    {
+        if (playerBody == null || cameraPivot == null)
+        {
+            Debug.LogError("Не подключен трансформ у игрока!");
+        }
+        if (lookAction == null)
+        {
+            Debug.LogError("Не подключено передвижение камеры!");
+        }
+    }
 
     private void OnEnable() => lookAction.action.Enable();
     private void OnDisable() => lookAction.action.Disable();

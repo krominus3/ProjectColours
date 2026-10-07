@@ -16,6 +16,19 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 velocity;
     private bool isGrounded;
 
+    private void Awake()
+    {
+        if (controller == null)
+        {
+            Debug.LogWarning("Не подключен CharacterController!");
+            controller = FindAnyObjectByType<CharacterController>();
+        }
+        if (moveAction == null || jumpAction == null)
+        {
+            Debug.LogError("Не подключено передвижение персонажем!");
+        }
+    }
+
     private void OnEnable()
     {
         moveAction.action.Enable();

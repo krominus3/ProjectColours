@@ -1,0 +1,75 @@
+{
+    "version": 1,
+    "name": "LensChangeButtons",
+    "maps": [
+        {
+            "name": "Buttons",
+            "id": "9ed7d3c4-c6cf-4543-ba32-bd7d46005f0f",
+            "actions": [
+                {
+                    "name": "Button1",
+                    "type": "Button",
+                    "id": "9d4140a0-1788-4fb6-939d-cc556a69d8b4",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Button2",
+                    "type": "Button",
+                    "id": "63bdebac-24ae-4cab-ab6b-0f2fca7f9ecc",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Button3",
+                    "type": "Button",
+                    "id": "e6d887cc-5dd7-4498-83d8-6fe47ecd5aa3",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "a5837d2c-44ee-477c-98b1-ed0599c696ac",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Button1",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "85d25fb5-331c-4752-bcb3-16cbab98c947",
+                    "path": "<Keyboard>/2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Button2",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "54d89880-3081-4c6f-9a77-993c1256462a",
+                    "path": "<Keyboard>/3",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Button3",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 488bb7f2c51ae8248a4e775a7994a9ab, type: 3}
+  m_Name: Blue
+  m_EditorClassIdentifier: Assembly-CSharp::LensData
+  type: 2
+  tintColor: {r: 0.29606602, g: 0.2783019, b: 1, a: 1}
+  icon: {fileID: 0}
+  worldTint: {r: 0.36320752, g: 0.53683215, b: 1, a: 0.43137255}
+  worldSaturation: 1
+  worldContrast: 1
