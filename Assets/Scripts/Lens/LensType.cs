@@ -2,9 +2,9 @@ public enum LensType
 {
     None,
     Red,
-    Green,
-    Blue,
     Yellow,
+    Blue,
+    Green,   // Yellow+Blue
     Purple,  // Red+Blue
     Orange,  // Red+Yellow
     Cyan,    // Blue+Yellow
