@@ -15,17 +15,18 @@ public class PlayerMovement : MonoBehaviour
 
     private Vector3 velocity;
     private bool isGrounded;
+    public bool secondJump = true;
 
     private void Awake()
     {
         if (controller == null)
         {
-            Debug.LogWarning("Не подключен CharacterController!");
+            Debug.LogWarning("пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ CharacterController!");
             controller = FindAnyObjectByType<CharacterController>();
         }
         if (moveAction == null || jumpAction == null)
         {
-            Debug.LogError("Не подключено передвижение персонажем!");
+            Debug.LogError("пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ!");
         }
     }
 
@@ -67,6 +68,11 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnJumpPerformed(InputAction.CallbackContext context)
     {
+        if(!isGrounded)
+        {
+            if(secondJump) secondJump = false;
+            else return;
+        }
         velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
     }
 

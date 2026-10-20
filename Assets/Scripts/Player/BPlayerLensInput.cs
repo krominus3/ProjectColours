@@ -5,7 +5,7 @@ public class BPlayerLensInput : MonoBehaviour
 {
     [SerializeField] private LensInventory inventory;
 
-    [Header("Линзы на клавиши")]
+    [Header("пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ")]
     [SerializeField] private LensData redLens;
     [SerializeField] private LensData blueLens;
     [SerializeField] private LensData yellowLens;
@@ -19,12 +19,12 @@ public class BPlayerLensInput : MonoBehaviour
     {
         if (inventory == null)
         {
-            Debug.LogWarning("Не подключен инвентарь!");
+            Debug.LogWarning("пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ!");
             inventory = FindAnyObjectByType<LensInventory>();
         }
-        if (redLensAction || blueLensAction || yellowLensAction)
+        if (!redLensAction || !blueLensAction || !yellowLensAction)
         {
-            Debug.LogError("Не подключено переключение линз!");
+            Debug.LogError("пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ!");
         }
     }
 
@@ -46,7 +46,7 @@ public class BPlayerLensInput : MonoBehaviour
     {
         if (actionRef == null)
         {
-            Debug.LogError($"Не подключен Input Action для линзы: {(lens != null ? lens.name : "null")}");
+            Debug.LogError($"пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ Input Action пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ: {(lens != null ? lens.name : "null")}");
             return;
         }
         actionRef.action.Enable();
@@ -60,13 +60,13 @@ public class BPlayerLensInput : MonoBehaviour
         actionRef.action.Disable();
     }
 
-    // --- Обработчики ---
+    // --- пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ ---
 
     private void OnRedPressed(InputAction.CallbackContext ctx) => Toggle(redLens);
     private void OnBluePressed(InputAction.CallbackContext ctx) => Toggle(blueLens);
     private void OnYellowPressed(InputAction.CallbackContext ctx) => Toggle(yellowLens);
 
-    // --- Логика ---
+    // --- пїЅпїЅпїЅпїЅпїЅпїЅ ---
 
     private void Toggle(LensData lens)
     {

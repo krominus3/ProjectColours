@@ -21,9 +21,10 @@ public class ColorBlock : MonoBehaviour
         bool sameColor = (current == blockColor);
         _col.enabled = !sameColor;
 
-        // Визуальный отклик
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
         _rend.GetPropertyBlock(_mpb);
-        _mpb.SetFloat("_Alpha", sameColor ? 0.25f : 1f);
+        _rend.enabled = !sameColor;
+        //_mpb.SetFloat("_Alpha", sameColor ? 0.25f : 1f);//Chtoby rabotalo luchshe sozdat' otdel'nye materialy s "Surface Type = Transparent". "Opaque" daet teni no ne daet prozrachnost' "Transparent" naobarot
         _rend.SetPropertyBlock(_mpb);
     }
 }

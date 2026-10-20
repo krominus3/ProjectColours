@@ -8,7 +8,9 @@ public class LensManager : MonoBehaviour
     [SerializeField] private LensInventory inventory;
     [SerializeField] private Volume postProcessVolume;
     [SerializeField] private LensVisualSettings[] visualSettings;
-    [SerializeField] private LensVisualSettings defaultSettings; // для LensType.None
+    [SerializeField] private LensVisualSettings defaultSettings; // пїЅпїЅпїЅ LensType.None
+
+    [SerializeField] private Material fullscreenMaterial;
 
     [Header("Transition")]
     [SerializeField] private bool smoothTransition = true;
@@ -19,11 +21,11 @@ public class LensManager : MonoBehaviour
     private Bloom _bloom;
     private LensDistortion _distortion;
 
-    // Целевые значения
+    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     private LensVisualSettings _target;
 
-    // Текущие интерполируемые значения
-    private float _t; // 0..1 прогресс перехода
+    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+    private float _t; // 0..1 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     private LensVisualSettings _from;
     private float _transitionDuration = 0.35f;
 
@@ -31,17 +33,17 @@ public class LensManager : MonoBehaviour
     {
         if (inventory == null)
         {
-            Debug.LogError("Не подключен инвентарь!");
+            Debug.LogError("пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ!");
             inventory = FindAnyObjectByType<LensInventory>();
         }
 
         if (postProcessVolume == null || postProcessVolume.profile == null)
         {
-            Debug.LogError("Не подключен Volume с профилем!");
+            Debug.LogError("пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ Volume пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ!");
             return;
         }
 
-        // Достаём оверрайды из профиля
+        // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         postProcessVolume.profile.TryGet(out _colorAdj);
         postProcessVolume.profile.TryGet(out _channelMixer);
         postProcessVolume.profile.TryGet(out _vignette);
@@ -64,14 +66,27 @@ public class LensManager : MonoBehaviour
     private void OnLensChanged(LensType type)
     {
         var settings = FindSettings(type);
-        _from = _target ?? defaultSettings; // текущий как «от»
+        _from = _target ?? defaultSettings; // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅ
         _target = settings;
         _t = 0f;
         _transitionDuration = settings != null ? settings.transitionDuration : 0.35f;
 
-        // Сообщаем блокам сразу (реакция не должна ждать плавности)
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ)
         foreach (var block in FindObjectsByType<ColorBlock>(FindObjectsSortMode.None))
             block.ReactToLens(type);
+            
+        ChangeColour(type);
+    }
+
+    public void ChangeColour(LensType type)
+    {
+        if(type == LensType.None) fullscreenMaterial.SetVector("_rgba",new Vector4(0f,0f,0f,1f));
+        else if(type == LensType.Red) fullscreenMaterial.SetVector("_rgba",new Vector4(1f,0f,0f,1f));
+        else if(type == LensType.Green) fullscreenMaterial.SetVector("_rgba",new Vector4(0f,1f,0f,1f));
+        else if(type == LensType.Blue) fullscreenMaterial.SetVector("_rgba",new Vector4(0f,0f,1f,1f));
+        else if(type == LensType.Cyan) fullscreenMaterial.SetVector("_rgba",new Vector4(-1f,0f,0f,1f));
+        else if(type == LensType.Purple) fullscreenMaterial.SetVector("_rgba",new Vector4(0f,-1f,0f,1f));
+        else if(type == LensType.Yellow) fullscreenMaterial.SetVector("_rgba",new Vector4(0f,0f,-1f,1f));
     }
 
     private void Update()
@@ -88,7 +103,7 @@ public class LensManager : MonoBehaviour
             _t = 1f;
         }
 
-        ApplyBlend(_from, _target, _t);
+        //ApplyBlend(_from, _target, _t);
     }
 
     private void ApplyBlend(LensVisualSettings a, LensVisualSettings b, float t)
