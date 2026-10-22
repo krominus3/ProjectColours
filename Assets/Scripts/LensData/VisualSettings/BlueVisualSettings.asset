@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c117e4e4c7837cf4db8d8b3d0b827121, type: 3}
   m_Name: BlueVisualSettings
   m_EditorClassIdentifier: Assembly-CSharp::LensVisualSettings
-  type: 2
+  type: 3
   saturation: -25
   contrast: 10
   postExposure: 0

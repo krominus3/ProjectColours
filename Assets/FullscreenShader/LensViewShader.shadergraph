@@ -32,6 +32,9 @@
         },
         {
             "m_Id": "38b2b1751f5d48e7a3af1da3545f8f11"
+        },
+        {
+            "m_Id": "ddd6cd45c4d9486bb658f041995315e4"
         }
     ],
     "m_Keywords": [],
@@ -2720,6 +2723,9 @@
         },
         {
             "m_Id": "5f6f173714704649a6f21aa97972e245"
+        },
+        {
+            "m_Id": "ddd6cd45c4d9486bb658f041995315e4"
         },
         {
             "m_Id": "ae347dcdb82649ffbef524b7329f59e0"
@@ -6029,6 +6035,41 @@
         "e32": 0.0,
         "e33": 1.0
     }
+}
+
+{
+    "m_SGVersion": 3,
+    "m_Type": "UnityEditor.ShaderGraph.Internal.ColorShaderProperty",
+    "m_ObjectId": "ddd6cd45c4d9486bb658f041995315e4",
+    "m_Guid": {
+        "m_GuidSerialized": "e740e8b3-dcb3-49c9-88e2-0d529700d793"
+    },
+    "promotedFromAssetID": "",
+    "promotedFromCategoryName": "",
+    "promotedOrdering": -1,
+    "m_Name": "betterOrange",
+    "m_DefaultRefNameVersion": 1,
+    "m_RefNameGeneratedByDisplayName": "betterOrange",
+    "m_DefaultReferenceName": "_betterOrange",
+    "m_OverrideReferenceName": "",
+    "m_GeneratePropertyBlock": true,
+    "m_UseCustomSlotLabel": false,
+    "m_CustomSlotLabel": "",
+    "m_DismissedVersion": 0,
+    "m_Precision": 0,
+    "overrideHLSLDeclaration": false,
+    "hlslDeclarationOverride": 0,
+    "m_Hidden": false,
+    "m_PerRendererData": false,
+    "m_customAttributes": [],
+    "m_Value": {
+        "r": 0.0,
+        "g": 0.0,
+        "b": 0.0,
+        "a": 1.0
+    },
+    "isMainColor": false,
+    "m_ColorMode": 0
 }
 
 {

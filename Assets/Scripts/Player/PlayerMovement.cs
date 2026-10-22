@@ -15,18 +15,20 @@ public class PlayerMovement : MonoBehaviour
 
     private Vector3 velocity;
     private bool isGrounded;
-    public bool secondJump = true;
+
+    // Счётчик дополнительных прыжков
+    private int _extraJumps = 0;
 
     private void Awake()
     {
         if (controller == null)
         {
-            Debug.LogWarning("�� ��������� CharacterController!");
+            Debug.LogWarning("Не подключен CharacterController!");
             controller = FindAnyObjectByType<CharacterController>();
         }
         if (moveAction == null || jumpAction == null)
         {
-            Debug.LogError("�� ���������� ������������ ����������!");
+            Debug.LogError("Не подключены Input Actions!");
         }
     }
 
@@ -49,9 +51,11 @@ public class PlayerMovement : MonoBehaviour
     {
         isGrounded = controller.isGrounded;
 
-        if (isGrounded && velocity.y < 0)
+        if (isGrounded)
         {
-            velocity.y = -2f;
+            if (velocity.y < 0) velocity.y = -2f;
+            // При приземлении сбрасываем все доп. прыжки
+            _extraJumps = 0;
         }
 
         Vector2 input = moveAction.action.ReadValue<Vector2>();
@@ -68,12 +72,22 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnJumpPerformed(InputAction.CallbackContext context)
     {
-        if(!isGrounded)
+        if (isGrounded)
         {
-            if(secondJump) secondJump = false;
-            else return;
+            // Обычный прыжок
+            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
-        velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+        else if (_extraJumps > 0)
+        {
+            // Дополнительный прыжок (зелёный блок)
+            _extraJumps--;
+            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+        }
     }
 
+    // Метод, который будет вызывать зелёный блок
+    public void AddExtraJump(int amount = 1)
+    {
+        _extraJumps += amount;
+    }
 }

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c117e4e4c7837cf4db8d8b3d0b827121, type: 3}
   m_Name: YellowVisualSettings
   m_EditorClassIdentifier: Assembly-CSharp::LensVisualSettings
-  type: 3
+  type: 2
   saturation: 20
   contrast: 5
   postExposure: 0

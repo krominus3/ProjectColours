@@ -4,10 +4,11 @@ public enum LensType
     Red,
     Yellow,
     Blue,
-    Green,   // Yellow+Blue
+    Green,   
     Purple,  // Red+Blue
     Orange,  // Red+Yellow
     Cyan,    // Blue+Yellow
-    White,   // ��� ���
+    White,   // All at one time
     Black    // ���������� / �����
+
 }

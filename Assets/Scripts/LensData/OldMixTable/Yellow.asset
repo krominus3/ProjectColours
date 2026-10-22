@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 488bb7f2c51ae8248a4e775a7994a9ab, type: 3}
   m_Name: Yellow
   m_EditorClassIdentifier: Assembly-CSharp::LensData
-  type: 3
+  type: 2
   tintColor: {r: 1, g: 0.96186554, b: 0.23113209, a: 1}
   icon: {fileID: 0}
   worldTint: {r: 1, g: 0.93834364, b: 0.2783019, a: 0.34901962}

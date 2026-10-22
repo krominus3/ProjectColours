@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using UnityEditor.PackageManager;
 using UnityEngine;
 
 public class LensInventory : MonoBehaviour
@@ -16,20 +15,26 @@ public class LensInventory : MonoBehaviour
     {
         if (mixTable == null)
         {
-            Debug.LogError("Не подключена таблица смешивания!");
+            Debug.LogError("Не подключена таблица смешивания в LensInventory!");
         }
     }
 
     public void Equip(LensData lens)
     {
+
         if (_equipped.Contains(lens)) return;
+
+
         _equipped.Add(lens);
         Recalculate();
     }
 
     public void Unequip(LensData lens)
     {
-        if (_equipped.Remove(lens)) Recalculate();
+        if (_equipped.Remove(lens))
+        {
+            Recalculate();
+        }
     }
 
     public bool IsEquipped(LensData l) => _equipped.Contains(l);
@@ -42,10 +47,13 @@ public class LensInventory : MonoBehaviour
 
     private void Recalculate()
     {
+        if (mixTable == null) return;
+
         var types = new List<LensType>();
         foreach (var l in _equipped) types.Add(l.type);
 
         CurrentColor = mixTable.MixAll(types);
+
         OnLensChanged?.Invoke(CurrentColor);
     }
 }

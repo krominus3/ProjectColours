@@ -6,14 +6,14 @@ public class BPlayerLensInput : MonoBehaviour
     [SerializeField] private LensInventory inventory;
 
     [Header("����� �� �������")]
-    [SerializeField] private LensData redLens;
-    [SerializeField] private LensData blueLens;
-    [SerializeField] private LensData yellowLens;
+    [SerializeField] private LensData firstLens;
+    [SerializeField] private LensData SecondLens;
+    [SerializeField] private LensData ThirdLens;
 
     [Header("Input Actions")]
-    [SerializeField] private InputActionReference redLensAction;
-    [SerializeField] private InputActionReference blueLensAction;
-    [SerializeField] private InputActionReference yellowLensAction;
+    [SerializeField] private InputActionReference firstLensAction;
+    [SerializeField] private InputActionReference SecondLensAction;
+    [SerializeField] private InputActionReference ThirdLensAction;
 
     private void Awake()
     {
@@ -22,7 +22,7 @@ public class BPlayerLensInput : MonoBehaviour
             Debug.LogWarning("�� ��������� ���������!");
             inventory = FindAnyObjectByType<LensInventory>();
         }
-        if (!redLensAction || !blueLensAction || !yellowLensAction)
+        if (!firstLensAction || !SecondLensAction || !ThirdLensAction)
         {
             Debug.LogError("�� ���������� ������������ ����!");
         }
@@ -30,16 +30,16 @@ public class BPlayerLensInput : MonoBehaviour
 
     private void OnEnable()
     {
-        Subscribe(redLensAction, OnRedPressed, redLens);
-        Subscribe(blueLensAction, OnBluePressed, blueLens);
-        Subscribe(yellowLensAction, OnYellowPressed, yellowLens);
+        Subscribe(firstLensAction, OnFirstPressed, firstLens);
+        Subscribe(SecondLensAction, OnSecondPressed, SecondLens);
+        Subscribe(ThirdLensAction, OnThirdPressed, ThirdLens);
     }
 
     private void OnDisable()
     {
-        Unsubscribe(redLensAction, OnRedPressed);
-        Unsubscribe(blueLensAction, OnBluePressed);
-        Unsubscribe(yellowLensAction, OnYellowPressed);
+        Unsubscribe(firstLensAction, OnFirstPressed);
+        Unsubscribe(SecondLensAction, OnSecondPressed);
+        Unsubscribe(ThirdLensAction, OnThirdPressed);
     }
 
     private void Subscribe(InputActionReference actionRef, System.Action<InputAction.CallbackContext> handler, LensData lens)
@@ -62,9 +62,9 @@ public class BPlayerLensInput : MonoBehaviour
 
     // --- ����������� ---
 
-    private void OnRedPressed(InputAction.CallbackContext ctx) => Toggle(redLens);
-    private void OnBluePressed(InputAction.CallbackContext ctx) => Toggle(blueLens);
-    private void OnYellowPressed(InputAction.CallbackContext ctx) => Toggle(yellowLens);
+    private void OnFirstPressed(InputAction.CallbackContext ctx) => Toggle(firstLens);
+    private void OnSecondPressed(InputAction.CallbackContext ctx) => Toggle(SecondLens);
+    private void OnThirdPressed(InputAction.CallbackContext ctx) => Toggle(ThirdLens);
 
     // --- ������ ---
 
@@ -73,8 +73,12 @@ public class BPlayerLensInput : MonoBehaviour
         if (lens == null || inventory == null) return;
 
         if (inventory.IsEquipped(lens))
+        {
             inventory.Unequip(lens);
+        }
         else
+        {
             inventory.Equip(lens);
+        }
     }
 }
