@@ -22,21 +22,3 @@ MonoBehaviour:
   - a: 3
     b: 1
     result: 5
-  - a: 7
-    b: 1
-    result: 8
-  - a: 2
-    b: 3
-    result: 8
-  - a: 5
-    b: 4
-    result: 8
-  - a: 0
-    b: 4
-    result: 4
-  - a: 0
-    b: 3
-    result: 3
-  - a: 0
-    b: 1
-    result: 1

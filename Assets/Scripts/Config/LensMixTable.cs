@@ -35,7 +35,7 @@ public class LensMixTable : ScriptableObject
         if (b == LensType.None) return a;
         if (a == b) return a;
 
-        return _cache.TryGetValue((a, b), out var r) ? r : LensType.Black;
+        return _cache.TryGetValue((a, b), out var r) ? r : LensType.White;
     }
 
     // Смешать список всех надетых линз
