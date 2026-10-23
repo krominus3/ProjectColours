@@ -154,6 +154,7 @@ GameObject:
   - component: {fileID: 5359557573614340206}
   - component: {fileID: 7455156939496433377}
   - component: {fileID: 8443811492162622413}
+  - component: {fileID: 3976377355207093997}
   m_Layer: 0
   m_Name: Trigger
   m_TagString: Untagged
@@ -209,3 +210,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec304b28e467c9b4db283363b36da568, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GreenDoubleJumpBlock
+--- !u!114 &3976377355207093997
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7337027180585177147}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a83ef21f0a02594eae54bd2102a0a1b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PurpleDashBlock

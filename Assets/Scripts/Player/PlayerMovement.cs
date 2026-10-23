@@ -90,4 +90,9 @@ public class PlayerMovement : MonoBehaviour
     {
         _extraJump = true;
     }
+
+    public void ResetVerticalVelocity()
+    {
+        velocity.y = 0f;
+    }
 }
