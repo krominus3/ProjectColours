@@ -17,11 +17,13 @@ public class ColoredBlock : MonoBehaviour
 
     private Collider _col;
     private Renderer _rend;
+    private GameObject _child;
 
     private void Awake()
     {
         _col = GetComponent<Collider>();
         _rend = GetComponent<Renderer>();
+        _child = transform.GetChild(0).gameObject;
         if (mixTable == null) mixTable = FindAnyObjectByType<LensMixTable>();
     }
 
@@ -44,10 +46,12 @@ public class ColoredBlock : MonoBehaviour
         currentColor = newColor;
 
         bool isPassable = makePassable && (lensColor == baseColor) && (lensColor != LensType.None);
+        //gameObject.SetActive(!isPassable);
         if (_col != null) _col.enabled = !isPassable;
         if (_rend != null) _rend.enabled = !isPassable;
+        if (_child != null) _child.SetActive(!isPassable);
 
-        // Ищем скрипты поведения НА СЕБЕ и НА ДОЧЕРНИХ ОБЪЕКТАХ
+        // Находим все скрипты поведения на блоке и на его дочерних объектах (для триггеров)
         var behaviors = GetComponentsInChildren<BlockBehavior>(true);
         foreach (var behavior in behaviors)
         {

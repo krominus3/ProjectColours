@@ -4,15 +4,14 @@ public class GreenDoubleJumpBlock : BlockBehavior
 {
     public override LensType RequiredColor => LensType.Green;
 
+    // OnTriggerStay срабатывает каждый кадр, пока игрок внутри триггера
     private void OnTriggerStay(Collider other)
     {
-        // Если поведение не активно (блок не зеленый) — ничего не делаем
-        if (!IsActive) return;
+        if (!enabled) return;
 
         if (other.CompareTag("Player"))
         {
             var playerMovement = other.GetComponent<PlayerMovement>();
-            //var playerMovement = other.GetComponent<PlayerMovement>();
             if (playerMovement != null)
             {
                 playerMovement.AddExtraJump(1);

@@ -5,19 +5,17 @@ public abstract class BlockBehavior : MonoBehaviour
     public abstract LensType RequiredColor { get; }
 
     protected ColoredBlock Block { get; private set; }
-    protected bool IsActive { get; private set; }
 
     protected virtual void Awake()
     {
-        // Ищем ColoredBlock на себе, а если нет — на родителе
         Block = GetComponent<ColoredBlock>();
         if (Block == null) Block = GetComponentInParent<ColoredBlock>();
-
-        IsActive = false;
+        enabled = false; // Выключаем при старте
     }
 
+    // Вызывается из ColoredBlock при смене цвета
     public virtual void OnColorChanged(LensType currentColor)
     {
-        IsActive = (currentColor == RequiredColor);
+        enabled = (currentColor == RequiredColor);
     }
 }

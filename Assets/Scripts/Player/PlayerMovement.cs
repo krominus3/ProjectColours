@@ -17,7 +17,7 @@ public class PlayerMovement : MonoBehaviour
     private bool isGrounded;
 
     // Счётчик дополнительных прыжков
-    private int _extraJumps = 0;
+    private bool _extraJump = false;
 
     private void Awake()
     {
@@ -55,7 +55,7 @@ public class PlayerMovement : MonoBehaviour
         {
             if (velocity.y < 0) velocity.y = -2f;
             // При приземлении сбрасываем все доп. прыжки
-            _extraJumps = 0;
+            _extraJump = false;
         }
 
         Vector2 input = moveAction.action.ReadValue<Vector2>();
@@ -77,10 +77,10 @@ public class PlayerMovement : MonoBehaviour
             // Обычный прыжок
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
-        else if (_extraJumps > 0)
+        else if (_extraJump == true)
         {
             // Дополнительный прыжок (зелёный блок)
-            _extraJumps--;
+            _extraJump = false;
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
     }
@@ -88,6 +88,6 @@ public class PlayerMovement : MonoBehaviour
     // Метод, который будет вызывать зелёный блок
     public void AddExtraJump(int amount = 1)
     {
-        _extraJumps += amount;
+        _extraJump = true;
     }
 }
