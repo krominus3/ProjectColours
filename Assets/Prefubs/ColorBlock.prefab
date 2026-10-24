@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2073023105608672271}
   - component: {fileID: 5998729078571593622}
   - component: {fileID: 4805934473810986165}
+  - component: {fileID: 1662330850277998378}
   - component: {fileID: 7030020199075398911}
   m_Layer: 7
   m_Name: ColorBlock
@@ -131,6 +132,18 @@ MonoBehaviour:
   currentColor: 8
   makePassable: 1
   mixTable: {fileID: 11400000, guid: c27cd2570859b9345913abcc21fa77bb, type: 2}
+--- !u!114 &1662330850277998378
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 803764976142828442}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67efa97122e3c9b428d41d1dd86cb623, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MovingPlatform
 --- !u!120 &7030020199075398911
 LineRenderer:
   serializedVersion: 3
@@ -253,6 +266,7 @@ GameObject:
   - component: {fileID: 7455156939496433377}
   - component: {fileID: 6709369699014402320}
   - component: {fileID: 8004285445230937040}
+  - component: {fileID: 1219857298484399414}
   m_Layer: 7
   m_Name: Trigger
   m_TagString: Untagged
@@ -330,3 +344,18 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 192
   lineRenderer: {fileID: 7030020199075398911}
+--- !u!114 &1219857298484399414
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7337027180585177147}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 064b697fd7638e34eab1b9bc1220e62b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::YellowMovingBlock
+  hasArrow: 1
+  moveSpeed: 5
+  moveDistance: 3

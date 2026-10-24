@@ -13,6 +13,7 @@ public class BlockEffectController : MonoBehaviour
 
     // Ссылка на тяжелый скрипт магнита
     private CyanMagnetBlock _magnetBlock;
+    private YellowMovingBlock _yellowBlock;
 
     private void Awake()
     {
@@ -21,6 +22,9 @@ public class BlockEffectController : MonoBehaviour
 
         // При старте выключаем магнит
         if (_magnetBlock != null) _magnetBlock.enabled = false;
+
+        _yellowBlock = GetComponentInChildren<YellowMovingBlock>();
+        if (_yellowBlock != null) _yellowBlock.enabled = false;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -49,6 +53,15 @@ public class BlockEffectController : MonoBehaviour
             if (_magnetBlock.enabled != isCyan)
             {
                 _magnetBlock.enabled = isCyan;
+            }
+        }
+
+        if (_yellowBlock != null)
+        {
+            bool isYellow = _block.currentColor == LensType.Yellow;
+            if (_yellowBlock.enabled != isYellow)
+            {
+                _yellowBlock.enabled = isYellow;
             }
         }
     }

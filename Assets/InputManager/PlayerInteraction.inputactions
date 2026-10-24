@@ -1,0 +1,35 @@
+{
+    "version": 1,
+    "name": "PlayerInteraction",
+    "maps": [
+        {
+            "name": "Interact",
+            "id": "1c43b07d-31ae-4a9f-bb6f-3df91bbacefb",
+            "actions": [
+                {
+                    "name": "IntreactButton",
+                    "type": "Button",
+                    "id": "ecce1a40-a2c8-4eb8-8452-401da0c21161",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "e560ed40-1686-4fae-97f0-9d51a914db0c",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "IntreactButton",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

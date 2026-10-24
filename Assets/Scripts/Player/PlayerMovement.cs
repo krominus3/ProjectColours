@@ -13,6 +13,12 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private InputActionReference moveAction;
     [SerializeField] private InputActionReference jumpAction;
 
+    [Header("Platform Settings")]
+    [SerializeField] private float groundCheckDistance = 0.2f; // Длина луча вниз
+    [SerializeField] private LayerMask groundMask = ~0;        // Слои, которые считаем полом
+
+    private MovingPlatform _currentPlatform;
+
     private Vector3 velocity;
     private bool isGrounded;
 
@@ -58,6 +64,13 @@ public class PlayerMovement : MonoBehaviour
             _extraJump = false;
         }
 
+        CheckForPlatform();
+        if (_currentPlatform != null && isGrounded)
+        {
+            // Двигаем игрока на ту же дельту, на которую сдвинулась платформа
+            controller.Move(_currentPlatform.DeltaPosition);
+        }
+
         Vector2 input = moveAction.action.ReadValue<Vector2>();
         Vector3 move = transform.right * input.x + transform.forward * input.y;
 
@@ -68,6 +81,24 @@ public class PlayerMovement : MonoBehaviour
 
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
+    }
+
+    private void CheckForPlatform()
+    {
+        // Пускаем луч вниз из центра капсулы игрока
+        Vector3 origin = transform.position + controller.center;
+        // Чуть-чуть не доходя до пола
+        float distance = (controller.height / 2f) + groundCheckDistance;
+
+        if (Physics.Raycast(origin, Vector3.down, out RaycastHit hit, distance, groundMask))
+        {
+            // Ищем скрипт MovingPlatform на том, на чем мы стоим
+            _currentPlatform = hit.collider.GetComponentInParent<MovingPlatform>();
+        }
+        else
+        {
+            _currentPlatform = null;
+        }
     }
 
     private void OnJumpPerformed(InputAction.CallbackContext context)
