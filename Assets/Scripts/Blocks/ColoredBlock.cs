@@ -49,7 +49,13 @@ public class ColoredBlock : MonoBehaviour
         //gameObject.SetActive(!isPassable);
         if (_col != null) _col.enabled = !isPassable;
         if (_rend != null) _rend.enabled = !isPassable;
-        if (_child != null) _child.SetActive(!isPassable);
+        if (_child != null)
+        {
+            var childCol = _child.GetComponent<Collider>();
+            if (childCol != null) childCol.enabled = !isPassable;
+            var childRend = _child.GetComponent<Renderer>();
+            if (childRend != null) childRend.enabled = !isPassable;
+        }
 
         // Находим все скрипты поведения на блоке и на его дочерних объектах (для триггеров)
         var behaviors = GetComponentsInChildren<BlockBehavior>(true);

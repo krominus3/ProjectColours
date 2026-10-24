@@ -14,7 +14,7 @@ public class GreenDoubleJumpBlock : BlockBehavior
             var playerMovement = other.GetComponent<PlayerMovement>();
             if (playerMovement != null)
             {
-                playerMovement.AddExtraJump(1);
+                playerMovement.AddExtraJump();
                 Debug.Log("[GreenBlock] Игроку выдан двойной прыжок!");
             }
         }

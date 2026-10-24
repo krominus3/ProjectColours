@@ -86,7 +86,7 @@ public class PlayerMovement : MonoBehaviour
     }
 
     // Метод, который будет вызывать зелёный блок
-    public void AddExtraJump(int amount = 1)
+    public void AddExtraJump()
     {
         _extraJump = true;
     }
