@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -21,9 +22,24 @@ public class PlayerMovement : MonoBehaviour
 
     private Vector3 velocity;
     private bool isGrounded;
+    private bool onGreen;
 
     // Счётчик дополнительных прыжков
     private bool _extraJump = false;
+
+    private bool _ExtraJump
+    {
+        get => _extraJump;
+        set
+        {
+            _extraJump = value;
+            OnExtraJumpChanged?.Invoke(_extraJump);
+        }
+    }
+
+    public event Action<bool> OnExtraJumpChanged;
+
+    public bool HasExtraJump => _ExtraJump;
 
     private void Awake()
     {
@@ -57,11 +73,11 @@ public class PlayerMovement : MonoBehaviour
     {
         isGrounded = controller.isGrounded;
 
-        if (isGrounded)
+        if (isGrounded && !onGreen)
         {
             if (velocity.y < 0) velocity.y = -2f;
             // При приземлении сбрасываем все доп. прыжки
-            _extraJump = false;
+            _ExtraJump = false;
         }
 
         CheckForPlatform();
@@ -108,10 +124,11 @@ public class PlayerMovement : MonoBehaviour
             // Обычный прыжок
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
-        else if (_extraJump == true)
+        else if (_ExtraJump == true)
         {
             // Дополнительный прыжок (зелёный блок)
-            _extraJump = false;
+            _ExtraJump = false;
+            
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
     }
@@ -119,8 +136,11 @@ public class PlayerMovement : MonoBehaviour
     // Метод, который будет вызывать зелёный блок
     public void AddExtraJump()
     {
-        _extraJump = true;
+        onGreen = true;
+        _ExtraJump = true;
     }
+
+    public void NotOnGreen() => onGreen = false; 
 
     public void ResetVerticalVelocity()
     {

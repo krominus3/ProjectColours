@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class BlockEffectController : MonoBehaviour
 {
-    [Header("Эффекты этого блока")]
+    [Header("РЃС„С„РµРєС‚С‹ СЌС‚РѕРіРѕ Р±Р»РѕРєР°")]
     public bool hasDoubleJump = true;
     public bool hasDash = true;
     public bool hasMagnet = true;
@@ -11,7 +11,7 @@ public class BlockEffectController : MonoBehaviour
     private GameObject _player;
     private bool _dashGiven;
 
-    // Ссылка на тяжелый скрипт магнита
+    // вЂ”СЃС‹Р»РєР° РЅР° С‚В¤Р¶РµР»С‹Р№ СЃРєСЂРёРїС‚ РјР°РіРЅРёС‚Р°
     private CyanMagnetBlock _magnetBlock;
     private YellowMovingBlock _yellowBlock;
 
@@ -20,7 +20,7 @@ public class BlockEffectController : MonoBehaviour
         _block = GetComponentInParent<ColoredBlock>();
         _magnetBlock = GetComponent<CyanMagnetBlock>();
 
-        // При старте выключаем магнит
+        // С•СЂРё СЃС‚Р°СЂС‚Рµ РІС‹РєР»СЋС‡Р°РµРј РјР°РіРЅРёС‚
         if (_magnetBlock != null) _magnetBlock.enabled = false;
 
         _yellowBlock = GetComponentInChildren<YellowMovingBlock>();
@@ -36,6 +36,8 @@ public class BlockEffectController : MonoBehaviour
     {
         if (other.gameObject != _player) return;
         SetDash(false);
+        if (_player.TryGetComponent(out PlayerMovement movement))
+            movement.NotOnGreen();
         _player = null;
     }
 
@@ -46,7 +48,7 @@ public class BlockEffectController : MonoBehaviour
             SetDash(hasDash && _block.currentColor == LensType.Purple);
         }
 
-        // Управляем магнитом (включаем/выключаем скрипт)
+        // вЂќРїСЂР°РІР»В¤РµРј РјР°РіРЅРёС‚РѕРј (РІРєР»СЋС‡Р°РµРј/РІС‹РєР»СЋС‡Р°РµРј СЃРєСЂРёРїС‚)
         if (_magnetBlock != null)
         {
             bool isCyan = _block.currentColor == LensType.Cyan && hasMagnet;

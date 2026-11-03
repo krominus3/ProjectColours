@@ -12,6 +12,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Yellow Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 803764976142828442, guid: b89d0c5847f6eba43bf71ff5eb4160c3, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 827422762652986339, guid: b89d0c5847f6eba43bf71ff5eb4160c3, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2.0200005
