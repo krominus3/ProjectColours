@@ -355,6 +355,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9053070508835412614}
+  - component: {fileID: 6816174701978696080}
   m_Layer: 7
   m_Name: Arrow
   m_TagString: Untagged
@@ -378,6 +379,19 @@ Transform:
   - {fileID: 1214473382915743354}
   m_Father: {fileID: 827422762652986339}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6816174701978696080
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3295741015737916541}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3582bf5356cd4ac44a062abc516395ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DirectionArrow
+  arrowHitRadius: 0.5
 --- !u!1 &7337027180585177147
 GameObject:
   m_ObjectHideFlags: 0
@@ -481,12 +495,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 064b697fd7638e34eab1b9bc1220e62b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::YellowMovingBlock
-  hasArrow: 1
   moveSpeed: 5
   wallMask:
     serializedVersion: 2
     m_Bits: 448
-  arrowPivot: {fileID: 9053070508835412614}
+  arrow: {fileID: 6816174701978696080}
 --- !u!114 &2142846005361041334
 MonoBehaviour:
   m_ObjectHideFlags: 0
