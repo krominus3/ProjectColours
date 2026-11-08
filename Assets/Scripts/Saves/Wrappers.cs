@@ -15,11 +15,6 @@ public class SavePlayerData
 }
 
 [Serializable]
-public class SavePlayerList
-{
-}
-
-[Serializable]
 public class SaveObj
 {
     public bool isPlayer;
