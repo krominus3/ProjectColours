@@ -21,10 +21,10 @@ public class PlayerDash : MonoBehaviour
     private float _cooldownTimeLeft;
     private Vector3 _dashDirection;
 
-    private bool _CanDash
+    public bool _CanDash
     {
         get => _canDash;
-        set
+        private set
         {
             _canDash = value;
             OnDashAbilityChanged?.Invoke(_canDash);
@@ -32,8 +32,6 @@ public class PlayerDash : MonoBehaviour
     }
 
     public event Action<bool> OnDashAbilityChanged;
-    
-    public bool HasDash => _CanDash;
 
     private void Awake()
     {

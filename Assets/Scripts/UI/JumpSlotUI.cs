@@ -21,7 +21,7 @@ public class JumpSlotUI : MonoBehaviour
     private void OnEnable()
     {
         if (movement != null) movement.OnExtraJumpChanged += HandleChanged;
-        Refresh(movement != null && movement.HasExtraJump);
+        Refresh(movement != null && movement._ExtraJump);
     }
 
     private void OnDisable()

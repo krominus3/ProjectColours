@@ -27,10 +27,10 @@ public class PlayerMovement : MonoBehaviour
     // Счётчик дополнительных прыжков
     private bool _extraJump = false;
 
-    private bool _ExtraJump
+    public bool _ExtraJump
     {
         get => _extraJump;
-        set
+        private set
         {
             _extraJump = value;
             OnExtraJumpChanged?.Invoke(_extraJump);
@@ -38,8 +38,6 @@ public class PlayerMovement : MonoBehaviour
     }
 
     public event Action<bool> OnExtraJumpChanged;
-
-    public bool HasExtraJump => _ExtraJump;
 
     private void Awake()
     {

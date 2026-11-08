@@ -1,0 +1,55 @@
+{
+    "version": 1,
+    "name": "SaveLoad",
+    "maps": [
+        {
+            "name": "SaveLoad",
+            "id": "a1f33b44-cd5e-43d2-bd44-3feb3018e654",
+            "actions": [
+                {
+                    "name": "Save",
+                    "type": "Button",
+                    "id": "00a5c847-2b65-4e76-8ee0-5ed881b5bcc8",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Load",
+                    "type": "Button",
+                    "id": "75778832-230f-4f0b-bff1-9d04a0d7d099",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "1d485ff8-7e80-4dee-8282-48ab16ef0d77",
+                    "path": "<Keyboard>/9",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Save",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9e0e2fd6-267d-4f6e-a0ff-777fefffd1b3",
+                    "path": "<Keyboard>/0",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Load",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
