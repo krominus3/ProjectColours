@@ -266,7 +266,7 @@ GameObject:
   - component: {fileID: 1214473382915743354}
   - component: {fileID: 7650810209602443236}
   m_Layer: 0
-  m_Name: File1
+  m_Name: VisualArrow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -391,7 +391,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3582bf5356cd4ac44a062abc516395ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DirectionArrow
+  isActive: 1
   arrowHitRadius: 0.5
+  visualObject: {fileID: 1864579588093072588}
 --- !u!1 &7337027180585177147
 GameObject:
   m_ObjectHideFlags: 0
@@ -499,6 +501,8 @@ MonoBehaviour:
   wallMask:
     serializedVersion: 2
     m_Bits: 448
+  pushDistance: 1
+  inputBufferTime: 0.5
   arrow: {fileID: 6816174701978696080}
 --- !u!114 &2142846005361041334
 MonoBehaviour:

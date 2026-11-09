@@ -7,11 +7,11 @@ public class YellowMovingBlock : MonoBehaviour
     [SerializeField] private LayerMask wallMask = ~0;
 
     [Header("Настройки толкания (без стрелки)")]
-    [SerializeField] private float pushDistance = 1f; // На сколько юнитов двигается за 1 нажатие
-    [SerializeField] private float inputBufferTime = 0.5f; // Сколько секунд помним нажатие
+    [SerializeField] private float pushDistance = 1f;
+    [SerializeField] private float inputBufferTime = 0.5f;
 
     [Header("Ссылки")]
-    [Tooltip("Объект со стрелкой. Оставь пустым, если стрелки нет.")]
+    [Tooltip("Объект со стрелкой (DirectionArrow).")]
     [SerializeField] private DirectionArrow arrow;
 
     private ColoredBlock _block;
@@ -21,12 +21,13 @@ public class YellowMovingBlock : MonoBehaviour
     private Vector3 _moveDirection;
     private Vector3 _targetPosition;
 
-    // --- ЛОГИКА БУФЕРА ---
+    // Буфер нажатий
     private Vector3 _bufferedDirection;
     private bool _hasBufferedInput = false;
     private float _bufferTimer = 0f;
 
-    private bool hasArrow => arrow != null;
+    // Проверяем, есть ли активная стрелка
+    private bool hasArrow => arrow != null && arrow.isActive;
 
     private void Awake()
     {
@@ -39,38 +40,40 @@ public class YellowMovingBlock : MonoBehaviour
     {
         if (_block != null && _block.currentColor != LensType.Yellow) return;
 
-        // 1. Если есть стрелка и мы не движемся — стартуем бесконечное движение
-        if (hasArrow && !_isMoving && _targetPosition == _rootObject.position)
+        // Логика для блока со стрелкой (бесконечное движение)
+        if (hasArrow)
         {
-            _moveDirection = arrow.ForwardDirection;
-            _isMoving = true;
+            if (!_isMoving && _targetPosition == _rootObject.position)
+            {
+                _moveDirection = arrow.ForwardDirection;
+                _isMoving = true;
+            }
         }
 
-        // 2. Обрабатываем движение
+        // Движение
         if (_isMoving)
         {
             MoveBlock();
         }
+        // Гравитация (только для блока без стрелки)
         else if (!hasArrow)
         {
             ApplyGravity();
         }
 
-        // 3. Обрабатываем буфер нажатий (если он есть)
+        // Обработка буфера нажатий
         if (_hasBufferedInput)
         {
             _bufferTimer -= Time.deltaTime;
 
-            // Если время вышло — забываем нажатие
             if (_bufferTimer <= 0f)
             {
                 _hasBufferedInput = false;
             }
-            // Если блок остановился и у нас есть отложенное нажатие — применяем его!
             else if (!_isMoving && !hasArrow)
             {
                 ExecutePush(_bufferedDirection);
-                _hasBufferedInput = false; // Очищаем буфер после использования
+                _hasBufferedInput = false;
             }
         }
     }
@@ -84,13 +87,12 @@ public class YellowMovingBlock : MonoBehaviour
             if (arrow.TryRotate(hitPoint))
             {
                 _moveDirection = arrow.ForwardDirection;
-                _targetPosition = _rootObject.position + _moveDirection * 100f; // Едем до стены
+                _targetPosition = _rootObject.position + _moveDirection * 100f;
                 _isMoving = true;
             }
         }
         else
         {
-            // Определяем направление по 4 сторонам
             Vector3 flatDir = new Vector3(playerLookDirection.x, 0, playerLookDirection.z).normalized;
             Vector3 snapDir = Vector3.zero;
             if (Mathf.Abs(flatDir.x) > Mathf.Abs(flatDir.z))
@@ -100,15 +102,12 @@ public class YellowMovingBlock : MonoBehaviour
 
             if (_isMoving)
             {
-                // Если блок еще едет — запоминаем нажатие в буфер
                 _bufferedDirection = snapDir;
                 _hasBufferedInput = true;
                 _bufferTimer = inputBufferTime;
-                Debug.Log($"[YellowBlock] Нажатие в буфер: {snapDir}. Ждем остановки.");
             }
             else
             {
-                // Если блок стоит — применяем сразу
                 ExecutePush(snapDir);
             }
         }
@@ -119,7 +118,6 @@ public class YellowMovingBlock : MonoBehaviour
         _moveDirection = direction;
         _targetPosition = _rootObject.position + _moveDirection * pushDistance;
         _isMoving = true;
-        Debug.Log($"[YellowBlock] Толчок на 1 юнит в направлении {_moveDirection}");
     }
 
     private void MoveBlock()
