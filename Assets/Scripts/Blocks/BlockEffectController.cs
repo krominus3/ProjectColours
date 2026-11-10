@@ -37,7 +37,7 @@ public class BlockEffectController : MonoBehaviour
         if (other.gameObject != _player) return;
         SetDash(false);
         if (_player.TryGetComponent(out PlayerMovement movement))
-            movement.NotOnGreen();
+            movement.IsOnGreen(false);
         _player = null;
     }
 
@@ -77,6 +77,7 @@ public class BlockEffectController : MonoBehaviour
             case LensType.Green when hasDoubleJump:
                 if (_player.TryGetComponent(out PlayerMovement movement))
                     movement.AddExtraJump();
+                    movement.IsOnGreen(true);
                 break;
         }
     }

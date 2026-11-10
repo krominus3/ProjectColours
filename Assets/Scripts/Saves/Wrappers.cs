@@ -12,6 +12,7 @@ public class SavePlayerData
     public bool hasDash;
     public PlayerCameraControl cameraPivot;
     public float cameraX;
+    public List<LensData> lenses;
 }
 
 [Serializable]

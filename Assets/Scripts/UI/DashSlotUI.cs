@@ -21,7 +21,7 @@ public class DashSlotUI : MonoBehaviour
     private void OnEnable()
     {
         if (dash != null) dash.OnDashAbilityChanged += HandleChanged;
-        Refresh(dash != null && dash._CanDash);
+        Refresh(dash != null && dash.HasDash);
     }
 
     private void OnDisable()

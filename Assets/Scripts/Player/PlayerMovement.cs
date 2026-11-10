@@ -30,7 +30,7 @@ public class PlayerMovement : MonoBehaviour
     public bool _ExtraJump
     {
         get => _extraJump;
-        private set
+        set
         {
             _extraJump = value;
             OnExtraJumpChanged?.Invoke(_extraJump);
@@ -38,6 +38,8 @@ public class PlayerMovement : MonoBehaviour
     }
 
     public event Action<bool> OnExtraJumpChanged;
+
+    public bool HasExtraJump => _ExtraJump;
 
     private void Awake()
     {
@@ -134,11 +136,10 @@ public class PlayerMovement : MonoBehaviour
     // Метод, который будет вызывать зелёный блок
     public void AddExtraJump()
     {
-        onGreen = true;
         _ExtraJump = true;
     }
 
-    public void NotOnGreen() => onGreen = false; 
+    public void IsOnGreen(bool var) => onGreen = var; 
 
     public void ResetVerticalVelocity()
     {

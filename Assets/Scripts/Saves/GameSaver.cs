@@ -9,6 +9,7 @@ public class GameSaver : MonoBehaviour
     public List<SaveObj> objsData;
     public List<SavePlayerData> playerData;
 
+    [SerializeField] private LensInventory inventory;
     [SerializeField] private InputActionReference saveAction;
     [SerializeField] private InputActionReference loadAction;
     public InputActionReference SaveAction => saveAction;
@@ -66,14 +67,15 @@ public class GameSaver : MonoBehaviour
             cc.enabled = true;
             cc.Move(Vector3.zero);
             if(player.has2Jump)
-            {
-                var movement = player.id.GetComponent<PlayerMovement>();
-                movement.AddExtraJump();
-            }
+                player.id.GetComponent<PlayerMovement>().AddExtraJump();
             if(player.hasDash)
                 player.id.GetComponent<PlayerDash>().AddDash();
             player.id.transform.rotation = player.rotation;
             player.cameraPivot._xRotation = player.cameraX;
+
+            inventory.ClearAll();
+            foreach(LensData lens in player.lenses)
+                inventory.Equip(lens);
         }
     }
 }

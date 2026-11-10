@@ -2,10 +2,10 @@ using UnityEngine;
 
 public class YellowMovingBlock : MonoBehaviour
 {
-    [Header("Настройки движения")]
+    [Header("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")]
     [SerializeField] private bool hasArrow = true;
     [SerializeField] private float moveSpeed = 5f;
-    [SerializeField] private float moveDistance = 2f; // Шаг движения
+    [SerializeField] private float moveDistance = 2f; // пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 
     private Vector3 _targetPos;
     private bool _isMoving = false;
@@ -18,7 +18,7 @@ public class YellowMovingBlock : MonoBehaviour
         _block = GetComponentInParent<ColoredBlock>();
         _rootObject = _block != null ? _block.transform : transform;
 
-        // Изначально цель — там, где мы стоим
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅ, пїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
         _targetPos = _rootObject.position;
     }
 
@@ -33,7 +33,7 @@ public class YellowMovingBlock : MonoBehaviour
             if (Vector3.Distance(_rootObject.position, _targetPos) < 0.01f)
             {
                 _isMoving = false;
-                // ВАЖНО: как только доехали, сбрасываем цель на текущую позицию
+                // пїЅпїЅпїЅпїЅпїЅ: пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
                 _targetPos = _rootObject.position;
             }
         }
@@ -45,13 +45,13 @@ public class YellowMovingBlock : MonoBehaviour
 
         if (hasArrow)
         {
-            // ВАЖНО: берем текущую позицию, а не стартовую!
-            _targetPos = _rootObject.position + _rootObject.forward * moveDistance;
+            // пїЅпїЅпїЅпїЅпїЅ: пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ!
+            _targetPos = _rootObject.position + _rootObject.up * moveDistance;
             _isMoving = true;
         }
         else
         {
-            // Толкаем в сторону от игрока
+            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
             Vector3 pushDirection = -hitNormal;
             _targetPos = _rootObject.position + pushDirection * moveDistance;
             _isMoving = true;

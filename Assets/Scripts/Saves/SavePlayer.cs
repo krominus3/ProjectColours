@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -6,9 +7,20 @@ public class SavePlayer : MonoBehaviour
     [SerializeField] private PlayerCameraControl cameraPivot;
     [SerializeField] private PlayerMovement playerMovement;
     [SerializeField] private PlayerDash playerDash;
+    [SerializeField] private LensInventory inventory;
     [SerializeField] private GameSaver gameSaver;
     private GameObject gameSaverObj;
 
+    private void Awake() {
+        if(cameraPivot == null)
+            cameraPivot = FindAnyObjectByType<PlayerCameraControl>();
+        if(playerMovement == null)
+            playerMovement = transform.GetComponent<PlayerMovement>();
+        if(playerDash == null)
+            playerDash = transform.GetComponent<PlayerDash>();
+        if(inventory == null)
+            inventory = transform.GetComponent<LensInventory>();
+    }
 
     private void OnEnable()
     {
@@ -43,7 +55,8 @@ public class SavePlayer : MonoBehaviour
                 has2Jump = playerMovement._ExtraJump,
                 hasDash = playerDash._CanDash,
                 cameraPivot = cameraPivot,
-                cameraX = cameraPivot._xRotation
+                cameraX = cameraPivot._xRotation,
+                lenses = inventory._equipped
             }
         );
     }

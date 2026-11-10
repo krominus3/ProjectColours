@@ -12,7 +12,7 @@ public class MovingPlatform : MonoBehaviour
 
     private void LateUpdate()
     {
-        // Вычисляем, насколько блок сдвинулся за этот кадр
+        // РІС‹С‡РёСЃР»СЏРµРј, РЅР°СЃРєРѕР»СЊРєРѕ Р±Р»РѕРє СЃРґРІРёРЅСѓР»СЃВ¤ Р·Р° СЌС‚РѕС‚ РєР°РґСЂ
         DeltaPosition = transform.position - _lastPosition;
         _lastPosition = transform.position;
     }

@@ -32,6 +32,8 @@ public class PlayerDash : MonoBehaviour
     }
 
     public event Action<bool> OnDashAbilityChanged;
+    
+    public bool HasDash => _CanDash;
 
     private void Awake()
     {

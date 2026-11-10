@@ -19,14 +19,16 @@ public class LensSlotUI : MonoBehaviour
 
     private void OnEnable()
     {
-        if (inventory != null) inventory.OnLensChanged += HandleLensChanged;
+        if (inventory != null)
+            inventory.OnLensChanged += HandleLensChanged;
 
         Refresh();
     }
 
     private void OnDisable()
     {
-        if (inventory != null) inventory.OnLensChanged -= HandleLensChanged;
+        if (inventory != null)
+            inventory.OnLensChanged -= HandleLensChanged;
     }
 
     private void HandleLensChanged(LensType _) => Refresh();
