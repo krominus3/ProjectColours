@@ -61,13 +61,15 @@ public class GameSaver : MonoBehaviour
 
         foreach (var player in wrapper.players)
         {
-            CharacterController cc = player.id.GetComponent<CharacterController>();
+            var cc = player.id.GetComponent<CharacterController>();
             cc.enabled = false;
             player.id.transform.position = player.position;
             cc.enabled = true;
             cc.Move(Vector3.zero);
+            var pm = player.id.GetComponent<PlayerMovement>();
+            pm.ResetVerticalVelocity();
             if(player.has2Jump)
-                player.id.GetComponent<PlayerMovement>().AddExtraJump();
+                pm.AddExtraJump();
             if(player.hasDash)
                 player.id.GetComponent<PlayerDash>().AddDash();
             player.id.transform.rotation = player.rotation;
