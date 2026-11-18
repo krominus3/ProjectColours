@@ -12,13 +12,14 @@ public class BlueSizeBlock : MonoBehaviour
     public enum SizeMode { Grow, Shrink }
 
     [Header("Режим работы")]
-    [Tooltip("Grow = растёт в сторону свободного места. Shrink = уменьшается до 1/4 к стенке или в центр.")]
+    [Tooltip("Используется, только если на блоке нет группы угловых стрелок (SizeArrowGroup). " +
+             "Grow = растёт в сторону свободного места. Shrink = уменьшается до 1/4 к стенке или в центр.")]
     [SerializeField] private SizeMode mode = SizeMode.Grow;
 
     [Header("Стрелки")]
-    [Tooltip("Угловые стрелки блока. Если пусто, ищутся автоматически среди дочерних объектов. " +
-             "Без стрелок режим фиксирован (как выбран выше).")]
-    [SerializeField] private SizeArrow[] arrows;
+    [Tooltip("Группа угловых стрелок (SizeArrowGroup). Если пусто, ищется среди дочерних объектов. " +
+             "Стрелки наружу = Grow, внутрь = Shrink.")]
+    [SerializeField] private SizeArrowGroup arrowGroup;
 
     [Header("Рост")]
     [Tooltip("Максимальный множитель размера (рост пропорциональный по всем осям).")]
@@ -56,62 +57,37 @@ public class BlueSizeBlock : MonoBehaviour
     private readonly Collider[] _overlapBuf = new Collider[32];
     private readonly RaycastHit[] _hitBuf = new RaycastHit[32];
 
+    // Текущий режим: если на блоке есть группа угловых стрелок — берём из неё
+    // (наружу = Grow, внутрь = Shrink), иначе из поля mode.
+    private SizeMode CurrentMode =>
+        arrowGroup != null ? (arrowGroup.IsOutward ? SizeMode.Grow : SizeMode.Shrink) : mode;
+
     private void Awake()
     {
         _block = GetComponentInParent<ColoredBlock>();
         _root = _block != null ? _block.transform : transform;
 
-        if (arrows == null || arrows.Length == 0)
-            arrows = _root.GetComponentsInChildren<SizeArrow>(true);
+        if (arrowGroup == null)
+            arrowGroup = _root.GetComponentInChildren<SizeArrowGroup>(true);
 
         SaveBaseTransform();
     }
 
-    private void Start()
-    {
-        SyncArrows();
-    }
-
     private void OnEnable()
     {
-        if (arrows == null) return;
-        foreach (var arrow in arrows)
-            if (arrow != null) arrow.Interacted += OnArrowInteracted;
+        if (arrowGroup != null) arrowGroup.Changed += OnArrowModeChanged;
     }
 
     private void OnDisable()
     {
-        if (arrows == null) return;
-        foreach (var arrow in arrows)
-            if (arrow != null) arrow.Interacted -= OnArrowInteracted;
+        if (arrowGroup != null) arrowGroup.Changed -= OnArrowModeChanged;
     }
 
-    // Игрок нажал на любую из угловых стрелок -> переключаем режим (один раз на нажатие).
-    // Работает при любом цвете блока; эффект виден, когда блок синий.
-    private void OnArrowInteracted(BlockArrow arrow)
+    // Игрок переключил стрелки. Работает при любом цвете блока;
+    // если блок сейчас синий — плавно переходим к новому размеру.
+    private void OnArrowModeChanged(bool outward)
     {
-        ToggleMode();
-    }
-
-    public void ToggleMode()
-    {
-        SetMode(mode == SizeMode.Grow ? SizeMode.Shrink : SizeMode.Grow);
-    }
-
-    public void SetMode(SizeMode newMode)
-    {
-        mode = newMode;
-        SyncArrows();
-        Recalculate(); // если блок сейчас синий — плавно перейти к новому размеру
-    }
-
-    private void SyncArrows()
-    {
-        if (arrows == null) return;
-        foreach (var arrow in arrows)
-        {
-            if (arrow != null) arrow.ShowMode(mode);
-        }
+        Recalculate();
     }
 
     /// <summary>
@@ -162,7 +138,7 @@ public class BlueSizeBlock : MonoBehaviour
         }
 
         Vector3 newScale, newPos;
-        if (mode == SizeMode.Grow) CalculateGrow(out newScale, out newPos);
+        if (CurrentMode == SizeMode.Grow) CalculateGrow(out newScale, out newPos);
         else CalculateShrink(out newScale, out newPos);
 
         BeginTransition(newScale, newPos);

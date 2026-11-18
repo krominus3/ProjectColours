@@ -1,9 +1,9 @@
 using UnityEngine;
 
 /// <summary>
-/// Угловая стрелка синего блока: показывает режим размера.
-/// Наружу = Grow (блок растёт), внутрь = Shrink (блок уменьшается).
-/// Режим хранит и переключает BlueSizeBlock (подписан на событие Interacted),
+/// Угловая стрелка блока: показывает режим «наружу / внутрь».
+/// Что это значит, решает цвет: синий — рост / уменьшение, бирюзовый — отталкивание / притяжение.
+/// Состояние хранит и переключает SizeArrowGroup (подписан на событие Interacted),
 /// стрелка только отображает его. Нужно целиться именно в стрелку (коллайдер на ней).
 /// Ставится в угол одной грани блока; по умолчанию смотрит НАРУЖУ (от центра блока).
 /// </summary>
@@ -33,11 +33,10 @@ public class SizeArrow : BlockArrow
         _rotationCaptured = true;
     }
 
-    /// <summary>Показать режим: Grow = наружу, Shrink = внутрь.</summary>
-    public void ShowMode(BlueSizeBlock.SizeMode mode)
+    /// <summary>Показать режим: true = стрелка наружу, false = внутрь.</summary>
+    public void ShowOutward(bool outward)
     {
         CaptureRotation();
-        bool outward = mode == BlueSizeBlock.SizeMode.Grow;
 
         if (outwardVisual != null || inwardVisual != null)
         {

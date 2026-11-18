@@ -135,6 +135,7 @@ MonoBehaviour:
   makePassable: 1
   disapearingComponents:
   - {fileID: 3295741015737916541}
+  - {fileID: 6518356520782660408}
   mixTable: {fileID: 11400000, guid: c27cd2570859b9345913abcc21fa77bb, type: 2}
 --- !u!114 &1662330850277998378
 MonoBehaviour:
@@ -808,6 +809,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2981540851047035648}
+  - component: {fileID: 6042722226073079232}
   m_Layer: 0
   m_Name: SIzeArrows
   m_TagString: Untagged
@@ -834,6 +836,24 @@ Transform:
   - {fileID: 5803827042147788620}
   m_Father: {fileID: 827422762652986339}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6042722226073079232
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6518356520782660408}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45e1dbe847f2af24396bd2169e2c926b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SizeArrowGroup
+  outward: 1
+  arrows:
+  - {fileID: 3695204892360221675}
+  - {fileID: 1359553854768913993}
+  - {fileID: 7356083875853022312}
+  - {fileID: 9214826056952673461}
 --- !u!1 &6776385531503397581
 GameObject:
   m_ObjectHideFlags: 0
@@ -1009,12 +1029,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25168e6d2a8c7c742bc846abe37b90c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CyanMagnetBlock
-  magnetForce: 15
   maxDistance: 10
-  isAttracting: 1
+  magnetForce: 15
+  playerSpeed: 8
+  magneticTag: Magnetic
+  affectPlayer: 1
   hitMask:
     serializedVersion: 2
     m_Bits: 448
+  directionArrow: {fileID: 6816174701978696080}
+  arrowGroup: {fileID: 6042722226073079232}
+  isAttracting: 1
   lineRenderer: {fileID: 7030020199075398911}
 --- !u!114 &1219857298484399414
 MonoBehaviour:
@@ -1048,7 +1073,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BlueSizeBlock
   mode: 0
-  arrows: []
+  arrowGroup: {fileID: 6042722226073079232}
   maxGrowMultiplier: 2
   minScaleMultiplier: 0.25
   changeSpeed: 3
