@@ -179,12 +179,36 @@ public class YellowMovingBlock : MonoBehaviour
         }
     }
 
+    private const float GroundSkin = 0.02f;
+    private readonly RaycastHit[] _groundHits = new RaycastHit[8];
+
     private void ApplyGravity()
     {
-        float halfHeight = _rootObject.localScale.y / 2f;
-        if (!Physics.Raycast(_rootObject.position, Vector3.down, halfHeight + 0.05f, wallMask))
+        // В первые кадры после загрузки сцены deltaTime бывает большим, ограничиваем шаг
+        float step = moveSpeed * Mathf.Min(Time.deltaTime, 0.05f);
+
+        // Тонкий бокс по размеру нижней грани блока, чуть выше самой грани (чтобы не
+        // пересекать пол, на котором блок стоит). Смотрим, сколько свободного места до пола.
+        Vector3 scale = _rootObject.localScale;
+        Vector3 half = new Vector3(scale.x * 0.5f * 0.95f, 0.02f, scale.z * 0.5f * 0.95f);
+        Vector3 origin = _rootObject.position + Vector3.down * (scale.y * 0.5f - GroundSkin - half.y);
+
+        int count = Physics.BoxCastNonAlloc(origin, half, Vector3.down, _groundHits, _rootObject.rotation,
+                                            step + GroundSkin, wallMask, QueryTriggerInteraction.Ignore);
+
+        // Падаем не дальше пола: последний шаг укорачивается, и блок встаёт ровно на поверхность
+        float fall = step;
+        for (int i = 0; i < count; i++)
         {
-            _rootObject.position += Vector3.down * moveSpeed * Time.deltaTime;
+            if (_groundHits[i].collider.transform.IsChildOf(_rootObject)) continue;
+            fall = Mathf.Min(fall, Mathf.Max(0f, _groundHits[i].distance - GroundSkin));
         }
+
+        if (fall > 0.0005f)
+            _rootObject.position += Vector3.down * fall;
+
+        // Блок «стоит», цель движения = текущая позиция (иначе после падения стрелка,
+        // включённая позже, не смогла бы запустить блок: см. Update)
+        _targetPosition = _rootObject.position;
     }
 }
