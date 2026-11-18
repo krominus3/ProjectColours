@@ -15,6 +15,11 @@ public class BlueSizeBlock : MonoBehaviour
     [Tooltip("Grow = растёт в сторону свободного места. Shrink = уменьшается до 1/4 к стенке или в центр.")]
     [SerializeField] private SizeMode mode = SizeMode.Grow;
 
+    [Header("Стрелки")]
+    [Tooltip("Угловые стрелки блока. Если пусто, ищутся автоматически среди дочерних объектов. " +
+             "Без стрелок режим фиксирован (как выбран выше).")]
+    [SerializeField] private SizeArrow[] arrows;
+
     [Header("Рост")]
     [Tooltip("Максимальный множитель размера (рост пропорциональный по всем осям).")]
     [SerializeField] private float maxGrowMultiplier = 2f;
@@ -55,7 +60,58 @@ public class BlueSizeBlock : MonoBehaviour
     {
         _block = GetComponentInParent<ColoredBlock>();
         _root = _block != null ? _block.transform : transform;
+
+        if (arrows == null || arrows.Length == 0)
+            arrows = _root.GetComponentsInChildren<SizeArrow>(true);
+
         SaveBaseTransform();
+    }
+
+    private void Start()
+    {
+        SyncArrows();
+    }
+
+    private void OnEnable()
+    {
+        if (arrows == null) return;
+        foreach (var arrow in arrows)
+            if (arrow != null) arrow.Interacted += OnArrowInteracted;
+    }
+
+    private void OnDisable()
+    {
+        if (arrows == null) return;
+        foreach (var arrow in arrows)
+            if (arrow != null) arrow.Interacted -= OnArrowInteracted;
+    }
+
+    // Игрок нажал на любую из угловых стрелок -> переключаем режим (один раз на нажатие).
+    // Работает при любом цвете блока; эффект виден, когда блок синий.
+    private void OnArrowInteracted(BlockArrow arrow)
+    {
+        ToggleMode();
+    }
+
+    public void ToggleMode()
+    {
+        SetMode(mode == SizeMode.Grow ? SizeMode.Shrink : SizeMode.Grow);
+    }
+
+    public void SetMode(SizeMode newMode)
+    {
+        mode = newMode;
+        SyncArrows();
+        Recalculate(); // если блок сейчас синий — плавно перейти к новому размеру
+    }
+
+    private void SyncArrows()
+    {
+        if (arrows == null) return;
+        foreach (var arrow in arrows)
+        {
+            if (arrow != null) arrow.ShowMode(mode);
+        }
     }
 
     /// <summary>

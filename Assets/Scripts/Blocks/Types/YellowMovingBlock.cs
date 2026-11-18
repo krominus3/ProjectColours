@@ -38,6 +38,28 @@ public class YellowMovingBlock : MonoBehaviour
         _targetPosition = _rootObject.position;
     }
 
+    private void OnEnable()
+    {
+        if (arrow != null) arrow.Interacted += OnArrowInteracted;
+    }
+
+    private void OnDisable()
+    {
+        if (arrow != null) arrow.Interacted -= OnArrowInteracted;
+    }
+
+    // Стрелка повёрнута игроком. Вращается она при ЛЮБОМ цвете блока.
+    // Ехать блок начнёт сразу, только если он сейчас жёлтый;
+    // иначе подхватит направление, когда станет жёлтым (см. Update).
+    private void OnArrowInteracted(BlockArrow _)
+    {
+        if (!hasArrow || !IsYellow) return;
+
+        _moveDirection = arrow.ForwardDirection;
+        _targetPosition = _rootObject.position + _moveDirection * 100f;
+        _isMoving = true;
+    }
+
     private void Update()
     {
         if (!IsYellow) return;
@@ -82,19 +104,12 @@ public class YellowMovingBlock : MonoBehaviour
 
     public void Interact(Vector3 playerLookDirection, Vector3 hitPoint)
     {
-        // Со стрелкой: вращаем её при ЛЮБОМ цвете блока.
-        // Ехать блок начнёт сразу, только если он сейчас жёлтый;
-        // иначе подхватит направление, когда станет жёлтым (см. Update).
+        // Со стрелкой: игрок нажал на сам блок. Стрелка реагирует на это, только если
+        // у неё разрешено «любая часть блока». Нажатие прямо на стрелку приходит
+        // отдельно, через событие Interacted (см. OnArrowInteracted).
         if (hasArrow)
         {
-            if (!arrow.TryRotate(hitPoint)) return;
-
-            if (IsYellow)
-            {
-                _moveDirection = arrow.ForwardDirection;
-                _targetPosition = _rootObject.position + _moveDirection * 100f;
-                _isMoving = true;
-            }
+            if (arrow.AcceptsAnyPartOfBlock) arrow.Interact();
             return;
         }
 
