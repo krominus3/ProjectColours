@@ -130,6 +130,10 @@ public class YellowMovingBlock : MonoBehaviour
         {
             _isMoving = false;
             _targetPosition = _rootObject.position;
+
+            // ВАЖНО: Сохраняем позицию!
+            var blueBlock = GetComponent<BlueSizeBlock>();
+            if (blueBlock != null) blueBlock.SaveBaseTransform();
             return;
         }
 
@@ -145,6 +149,10 @@ public class YellowMovingBlock : MonoBehaviour
             {
                 _rootObject.position = _targetPosition;
                 _isMoving = false;
+
+                // ВАЖНО: Сохраняем новую позицию для BlueSizeBlock!
+                var blueBlock = GetComponent<BlueSizeBlock>();
+                if (blueBlock != null) blueBlock.SaveBaseTransform();
             }
         }
     }

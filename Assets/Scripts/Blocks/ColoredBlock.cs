@@ -12,6 +12,7 @@ public class ColoredBlock : MonoBehaviour
 
     [Header("Настройки")]
     public bool makePassable = true;
+    [SerializeField] private List<GameObject> disapearingComponents = new List<GameObject>();
 
     [SerializeField] private LensMixTable mixTable;
 
@@ -55,6 +56,14 @@ public class ColoredBlock : MonoBehaviour
             if (childCol != null) childCol.enabled = !isPassable;
             var childRend = _child.GetComponent<Renderer>();
             if (childRend != null) childRend.enabled = !isPassable;
+            if (disapearingComponents != null)
+            {
+                //скорей всего это очень сильно наргружает код, но пока не определимся с количеством внутренних компонентов это будет тут.
+                foreach (var dobj_ in disapearingComponents)
+                {
+                    dobj_.SetActive(!isPassable);
+                }
+            }
         }
 
         // Находим все скрипты поведения на блоке и на его дочерних объектах (для триггеров)
