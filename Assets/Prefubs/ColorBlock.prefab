@@ -394,7 +394,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DirectionArrow
   isActive: 1
-  arrowHitRadius: 1
+  requireAimNearArrow: 1
+  arrowHitRadius: 0.5
+  rotationStep: 90
   visualObject: {fileID: 1864579588093072588}
 --- !u!1 &7337027180585177147
 GameObject:

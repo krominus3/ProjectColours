@@ -2,16 +2,16 @@ using UnityEngine;
 
 public class YellowMovingBlock : MonoBehaviour
 {
-    [Header("Настройки движения")]
+    [Header("Параметры движения")]
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private LayerMask wallMask = ~0;
 
-    [Header("Настройки толкания (без стрелки)")]
+    [Header("Параметры толкания (без стрелки)")]
     [SerializeField] private float pushDistance = 1f;
     [SerializeField] private float inputBufferTime = 0.5f;
 
-    [Header("Ссылки")]
-    [Tooltip("Объект со стрелкой (DirectionArrow).")]
+    [Header("Стрелка")]
+    [Tooltip("Ссылка на стрелку (DirectionArrow).")]
     [SerializeField] private DirectionArrow arrow;
 
     private ColoredBlock _block;
@@ -21,13 +21,15 @@ public class YellowMovingBlock : MonoBehaviour
     private Vector3 _moveDirection;
     private Vector3 _targetPosition;
 
-    // Буфер нажатий
+    // Буфер нажатия
     private Vector3 _bufferedDirection;
     private bool _hasBufferedInput = false;
     private float _bufferTimer = 0f;
 
     // Проверяем, есть ли активная стрелка
     private bool hasArrow => arrow != null && arrow.isActive;
+
+    private bool IsYellow => _block == null || _block.currentColor == LensType.Yellow;
 
     private void Awake()
     {
@@ -38,9 +40,9 @@ public class YellowMovingBlock : MonoBehaviour
 
     private void Update()
     {
-        if (_block != null && _block.currentColor != LensType.Yellow) return;
+        if (!IsYellow) return;
 
-        // Логика для блока со стрелкой (бесконечное движение)
+        // Со стрелкой блок едет сам (постоянное движение)
         if (hasArrow)
         {
             if (!_isMoving && _targetPosition == _rootObject.position)
@@ -55,13 +57,13 @@ public class YellowMovingBlock : MonoBehaviour
         {
             MoveBlock();
         }
-        // Гравитация (только для блока без стрелки)
+        // Гравитация (только без стрелки)
         else if (!hasArrow)
         {
             ApplyGravity();
         }
 
-        // Обработка буфера нажатий
+        // Обработка буфера нажатия
         if (_hasBufferedInput)
         {
             _bufferTimer -= Time.deltaTime;
@@ -80,36 +82,41 @@ public class YellowMovingBlock : MonoBehaviour
 
     public void Interact(Vector3 playerLookDirection, Vector3 hitPoint)
     {
-        if (_block != null && _block.currentColor != LensType.Yellow) return;
-
+        // Со стрелкой: вращаем её при ЛЮБОМ цвете блока.
+        // Ехать блок начнёт сразу, только если он сейчас жёлтый;
+        // иначе подхватит направление, когда станет жёлтым (см. Update).
         if (hasArrow)
         {
-            if (arrow.TryRotate(hitPoint))
+            if (!arrow.TryRotate(hitPoint)) return;
+
+            if (IsYellow)
             {
                 _moveDirection = arrow.ForwardDirection;
                 _targetPosition = _rootObject.position + _moveDirection * 100f;
                 _isMoving = true;
             }
+            return;
+        }
+
+        // Без стрелки: толкание работает только у жёлтого блока
+        if (!IsYellow) return;
+
+        Vector3 flatDir = new Vector3(playerLookDirection.x, 0, playerLookDirection.z).normalized;
+        Vector3 snapDir;
+        if (Mathf.Abs(flatDir.x) > Mathf.Abs(flatDir.z))
+            snapDir = new Vector3(Mathf.Sign(flatDir.x), 0, 0);
+        else
+            snapDir = new Vector3(0, 0, Mathf.Sign(flatDir.z));
+
+        if (_isMoving)
+        {
+            _bufferedDirection = snapDir;
+            _hasBufferedInput = true;
+            _bufferTimer = inputBufferTime;
         }
         else
         {
-            Vector3 flatDir = new Vector3(playerLookDirection.x, 0, playerLookDirection.z).normalized;
-            Vector3 snapDir = Vector3.zero;
-            if (Mathf.Abs(flatDir.x) > Mathf.Abs(flatDir.z))
-                snapDir = new Vector3(Mathf.Sign(flatDir.x), 0, 0);
-            else
-                snapDir = new Vector3(0, 0, Mathf.Sign(flatDir.z));
-
-            if (_isMoving)
-            {
-                _bufferedDirection = snapDir;
-                _hasBufferedInput = true;
-                _bufferTimer = inputBufferTime;
-            }
-            else
-            {
-                ExecutePush(snapDir);
-            }
+            ExecutePush(snapDir);
         }
     }
 
@@ -131,7 +138,7 @@ public class YellowMovingBlock : MonoBehaviour
             _isMoving = false;
             _targetPosition = _rootObject.position;
 
-            // ВАЖНО: Сохраняем позицию!
+            // Важно: сохранить базовое состояние для синего блока
             var blueBlock = GetComponent<BlueSizeBlock>();
             if (blueBlock != null) blueBlock.SaveBaseTransform();
             return;
@@ -150,7 +157,7 @@ public class YellowMovingBlock : MonoBehaviour
                 _rootObject.position = _targetPosition;
                 _isMoving = false;
 
-                // ВАЖНО: Сохраняем новую позицию для BlueSizeBlock!
+                // Важно: сохранить новую позицию для BlueSizeBlock
                 var blueBlock = GetComponent<BlueSizeBlock>();
                 if (blueBlock != null) blueBlock.SaveBaseTransform();
             }

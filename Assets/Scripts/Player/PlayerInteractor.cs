@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -6,6 +7,10 @@ public class PlayerInteractor : MonoBehaviour
     [Header("Настройки")]
     [SerializeField] private float interactDistance = 3f;
     [SerializeField] private InputActionReference interactAction;
+
+    private readonly RaycastHit[] _hits = new RaycastHit[16];
+    private static readonly Comparer<RaycastHit> ByDistance =
+        Comparer<RaycastHit>.Create((a, b) => a.distance.CompareTo(b.distance));
 
     private void OnEnable()
     {
@@ -23,15 +28,26 @@ public class PlayerInteractor : MonoBehaviour
     {
         Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
 
-        if (Physics.Raycast(ray, out RaycastHit hit, interactDistance, ~0, QueryTriggerInteraction.Collide))
-        {
-            var yellowBlock = hit.collider.GetComponentInParent<YellowMovingBlock>();
+        int count = Physics.RaycastNonAlloc(ray, _hits, interactDistance, ~0, QueryTriggerInteraction.Collide);
+        System.Array.Sort(_hits, 0, count, ByDistance);
 
+        for (int i = 0; i < count; i++)
+        {
+            Collider col = _hits[i].collider;
+
+            // Свои коллайдеры игрока луч не блокируют
+            if (col.transform.IsChildOf(transform)) continue;
+
+            var yellowBlock = col.GetComponentInParent<YellowMovingBlock>();
             if (yellowBlock != null)
             {
-                // Передаем и направление взгляда, и точку, куда попал луч
-                yellowBlock.Interact(transform.forward, hit.point);
+                yellowBlock.Interact(transform.forward, _hits[i].point);
+                return;
             }
+
+            // Триггеры (нажимные плиты, лазеры, зоны) луч не блокируют,
+            // а любая твёрдая поверхность не даёт взаимодействовать сквозь себя
+            if (!col.isTrigger) return;
         }
     }
 }
