@@ -2,12 +2,13 @@ using UnityEngine;
 
 public class BlockVisibilityManager : MonoBehaviour
 {
-    [Header("Ссылки")]
+    [Header("РЎСЃС‹Р»РєРё")]
     [SerializeField] private Camera playerCamera;
     [SerializeField] private LensInventory inventory;
+    [SerializeField] private Collider player;
 
-    [Header("Настройки производительности")]
-    [Tooltip("Как часто проверять видимость (в секундах). 0.1 = 10 раз в секунду.")]
+    [Header("РќР°СЃС‚СЂРѕР№РєРё РїСЂРѕРёР·РІРѕРґРёС‚РµР»СЊРЅРѕСЃС‚Рё")]
+    [Tooltip("РљР°Рє С‡Р°СЃС‚Рѕ РїСЂРѕРІРµСЂСЏС‚СЊ РІРёРґРёРјРѕСЃС‚СЊ (РІ СЃРµРєСѓРЅРґР°С…). 0.1 = 10 СЂР°Р· РІ СЃРµРєСѓРЅРґСѓ.")]
     [SerializeField] private float updateInterval = 0.1f;
 
     private float _timer;
@@ -17,13 +18,18 @@ public class BlockVisibilityManager : MonoBehaviour
     {
         if (playerCamera == null) playerCamera = Camera.main;
         if (inventory == null) inventory = FindAnyObjectByType<LensInventory>();
+
+        if (player == null)
+        {
+            var pc = FindAnyObjectByType<PlayerMovement>();
+            if (pc != null) player = pc.transform.GetComponent<Collider>();
+        }
     }
 
     private void Update()
     {
         if (playerCamera == null || inventory == null) return;
 
-        // Оптимизация: проверяем не каждый кадр, а с заданным интервалом
         _timer -= Time.deltaTime;
         if (_timer > 0f) return;
         _timer = updateInterval;
@@ -33,29 +39,40 @@ public class BlockVisibilityManager : MonoBehaviour
 
     private void UpdateVisibility()
     {
-        // Получаем 6 плоскостей поля зрения камеры
         GeometryUtility.CalculateFrustumPlanes(playerCamera, _frustumPlanes);
 
         LensType currentLens = inventory.CurrentColor;
 
-        // Проходим по всем блокам в реестре
         foreach (var block in ColoredBlock.AllBlocks)
         {
             if (block == null) continue;
 
-            // Проверяем, пересекается ли блок с полем зрения
+            // Р•СЃР»Рё РёРіСЂРѕРє РІРЅСѓС‚СЂРё Р±Р»РѕРєР° вЂ” РЅРµ С‚СЂРѕРіР°РµРј Р±Р»РѕРє РІРѕРѕР±С‰Рµ,
+            // С‡С‚РѕР±С‹ РѕРЅ РЅРµ "РІРєР»СЋС‡РёР»СЃСЏ" РѕР±СЂР°С‚РЅРѕ Рё РЅРµ Р·Р°Р¶Р°Р» РёРіСЂРѕРєР°.
+            if (inventory.CurrentColor == block.baseColor)
+                if (IsPlayerInside(block))
+                {
+                    block.ReactToLens(currentLens);
+                    continue;
+                }
+
             bool isVisible = GeometryUtility.TestPlanesAABB(_frustumPlanes, block.GetBounds());
 
             if (isVisible)
-            {
-                // Если в поле зрения — применяем эффект
                 block.ReactToLens(currentLens);
-            }
             else
-            {
-                // Если за кадром — сбрасываем
                 block.ResetToBaseState();
-            }
         }
+    }
+
+    private bool IsPlayerInside(ColoredBlock block)
+    {
+        if (player == null) return false;
+
+        Bounds blockBounds = block.GetBounds();
+        Bounds playerBounds = player.bounds;
+        playerBounds.Expand(-0.05f);
+
+        return blockBounds.Intersects(playerBounds);
     }
 }

@@ -6,7 +6,7 @@ public class PurpleDashBlock : BlockBehavior
 
     private void OnTriggerStay(Collider other)
     {
-        if (!enabled) return;
+        if (enabled) return;
 
         if (other.CompareTag("Player"))
         {
@@ -14,20 +14,6 @@ public class PurpleDashBlock : BlockBehavior
             if (playerDash != null)
             {
                 playerDash.AddDash();
-            }
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (!enabled) return;
-
-        if (other.CompareTag("Player"))
-        {
-            var playerDash = other.GetComponent<PlayerDash>();
-            if (playerDash != null)
-            {
-                playerDash.RemoveDash();
             }
         }
     }

@@ -6,11 +6,11 @@ public class ColoredBlock : MonoBehaviour
 {
     public static readonly List<ColoredBlock> AllBlocks = new List<ColoredBlock>();
 
-    [Header("Цвета")]
+    [Header("Р¦РІРµС‚Р°")]
     public LensType baseColor = LensType.Red;
     [HideInInspector] public LensType currentColor = LensType.Red;
 
-    [Header("Настройки")]
+    [Header("РќР°СЃС‚СЂРѕР№РєРё")]
     public bool makePassable = true;
     [SerializeField] private List<GameObject> disapearingComponents = new List<GameObject>();
 
@@ -66,7 +66,7 @@ public class ColoredBlock : MonoBehaviour
             }
         }
 
-        // Находим все скрипты поведения на блоке и на его дочерних объектах (для триггеров)
+        // РќР°С…РѕРґРёРј РІСЃРµ СЃРєСЂРёРїС‚С‹ РїРѕРІРµРґРµРЅРёСЏ РЅР° Р±Р»РѕРєРµ Рё РЅР° РµРіРѕ РґРѕС‡РµСЂРЅРёС… РѕР±СЉРµРєС‚Р°С… (РґР»СЏ С‚СЂРёРіРіРµСЂРѕРІ)
         var behaviors = GetComponentsInChildren<BlockBehavior>(true);
         foreach (var behavior in behaviors)
         {

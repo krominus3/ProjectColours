@@ -6,7 +6,7 @@ public class LensInventory : MonoBehaviour
 {
     [SerializeField] private LensMixTable mixTable;
 
-    private readonly List<LensData> _equipped = new();
+    public readonly List<LensData> _equipped = new();
     public event Action<LensType> OnLensChanged;
 
     public LensType CurrentColor { get; private set; } = LensType.None;
@@ -15,7 +15,7 @@ public class LensInventory : MonoBehaviour
     {
         if (mixTable == null)
         {
-            Debug.LogError("Не подключена таблица смешивания в LensInventory!");
+            Debug.LogError("пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ LensInventory!");
         }
     }
 

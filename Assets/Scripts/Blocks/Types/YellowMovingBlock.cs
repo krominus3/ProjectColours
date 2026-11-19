@@ -2,16 +2,16 @@ using UnityEngine;
 
 public class YellowMovingBlock : MonoBehaviour
 {
-    [Header("Параметры движения")]
+    [Header("ГЏГ Г°Г Г¬ГҐГІГ°Г» Г¤ГўГЁГ¦ГҐГ­ГЁГї")]
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private LayerMask wallMask = ~0;
 
-    [Header("Параметры толкания (без стрелки)")]
+    [Header("ГЏГ Г°Г Г¬ГҐГІГ°Г» ГІГ®Г«ГЄГ Г­ГЁГї (ГЎГҐГ§ Г±ГІГ°ГҐГ«ГЄГЁ)")]
     [SerializeField] private float pushDistance = 1f;
     [SerializeField] private float inputBufferTime = 0.5f;
 
-    [Header("Стрелка")]
-    [Tooltip("Ссылка на стрелку (DirectionArrow).")]
+    [Header("Г‘ГІГ°ГҐГ«ГЄГ ")]
+    [Tooltip("Г‘Г±Г»Г«ГЄГ  Г­Г  Г±ГІГ°ГҐГ«ГЄГі (DirectionArrow).")]
     [SerializeField] private DirectionArrow arrow;
 
     private ColoredBlock _block;
@@ -21,12 +21,12 @@ public class YellowMovingBlock : MonoBehaviour
     private Vector3 _moveDirection;
     private Vector3 _targetPosition;
 
-    // Буфер нажатия
+    // ГЃГіГґГҐГ° Г­Г Г¦Г ГІГЁГї
     private Vector3 _bufferedDirection;
     private bool _hasBufferedInput = false;
     private float _bufferTimer = 0f;
 
-    // Проверяем, есть ли активная стрелка
+    // ГЏГ°Г®ГўГҐГ°ГїГҐГ¬, ГҐГ±ГІГј Г«ГЁ Г ГЄГІГЁГўГ­Г Гї Г±ГІГ°ГҐГ«ГЄГ 
     private bool hasArrow => arrow != null && arrow.isActive;
 
     private bool IsYellow => _block == null || _block.currentColor == LensType.Yellow;
@@ -48,9 +48,9 @@ public class YellowMovingBlock : MonoBehaviour
         if (arrow != null) arrow.Interacted -= OnArrowInteracted;
     }
 
-    // Стрелка повёрнута игроком. Вращается она при ЛЮБОМ цвете блока.
-    // Ехать блок начнёт сразу, только если он сейчас жёлтый;
-    // иначе подхватит направление, когда станет жёлтым (см. Update).
+    // Г‘ГІГ°ГҐГ«ГЄГ  ГЇГ®ГўВёГ°Г­ГіГІГ  ГЁГЈГ°Г®ГЄГ®Г¬. Г‚Г°Г Г№Г ГҐГІГ±Гї Г®Г­Г  ГЇГ°ГЁ Г‹ГћГЃГЋГЊ Г¶ГўГҐГІГҐ ГЎГ«Г®ГЄГ .
+    // Г…ГµГ ГІГј ГЎГ«Г®ГЄ Г­Г Г·Г­ВёГІ Г±Г°Г Г§Гі, ГІГ®Г«ГјГЄГ® ГҐГ±Г«ГЁ Г®Г­ Г±ГҐГ©Г·Г Г± Г¦ВёГ«ГІГ»Г©;
+    // ГЁГ­Г Г·ГҐ ГЇГ®Г¤ГµГўГ ГІГЁГІ Г­Г ГЇГ°Г ГўГ«ГҐГ­ГЁГҐ, ГЄГ®ГЈГ¤Г  Г±ГІГ Г­ГҐГІ Г¦ВёГ«ГІГ»Г¬ (Г±Г¬. Update).
     private void OnArrowInteracted(BlockArrow _)
     {
         if (!hasArrow || !IsYellow) return;
@@ -64,7 +64,7 @@ public class YellowMovingBlock : MonoBehaviour
     {
         if (!IsYellow) return;
 
-        // Со стрелкой блок едет сам (постоянное движение)
+        // Г‘Г® Г±ГІГ°ГҐГ«ГЄГ®Г© ГЎГ«Г®ГЄ ГҐГ¤ГҐГІ Г±Г Г¬ (ГЇГ®Г±ГІГ®ГїГ­Г­Г®ГҐ Г¤ГўГЁГ¦ГҐГ­ГЁГҐ)
         if (hasArrow)
         {
             if (!_isMoving && _targetPosition == _rootObject.position)
@@ -74,18 +74,18 @@ public class YellowMovingBlock : MonoBehaviour
             }
         }
 
-        // Движение
+        // Г„ГўГЁГ¦ГҐГ­ГЁГҐ
         if (_isMoving)
         {
             MoveBlock();
         }
-        // Гравитация (только без стрелки)
+        // ГѓГ°Г ГўГЁГІГ Г¶ГЁГї (ГІГ®Г«ГјГЄГ® ГЎГҐГ§ Г±ГІГ°ГҐГ«ГЄГЁ)
         else if (!hasArrow)
         {
             ApplyGravity();
         }
 
-        // Обработка буфера нажатия
+        // ГЋГЎГ°Г ГЎГ®ГІГЄГ  ГЎГіГґГҐГ°Г  Г­Г Г¦Г ГІГЁГї
         if (_hasBufferedInput)
         {
             _bufferTimer -= Time.deltaTime;
@@ -104,16 +104,16 @@ public class YellowMovingBlock : MonoBehaviour
 
     public void Interact(Vector3 playerLookDirection, Vector3 hitPoint)
     {
-        // Со стрелкой: игрок нажал на сам блок. Стрелка реагирует на это, только если
-        // у неё разрешено «любая часть блока». Нажатие прямо на стрелку приходит
-        // отдельно, через событие Interacted (см. OnArrowInteracted).
+        // Г‘Г® Г±ГІГ°ГҐГ«ГЄГ®Г©: ГЁГЈГ°Г®ГЄ Г­Г Г¦Г Г« Г­Г  Г±Г Г¬ ГЎГ«Г®ГЄ. Г‘ГІГ°ГҐГ«ГЄГ  Г°ГҐГ ГЈГЁГ°ГіГҐГІ Г­Г  ГЅГІГ®, ГІГ®Г«ГјГЄГ® ГҐГ±Г«ГЁ
+        // Гі Г­ГҐВё Г°Г Г§Г°ГҐГёГҐГ­Г® В«Г«ГѕГЎГ Гї Г·Г Г±ГІГј ГЎГ«Г®ГЄГ В». ГЌГ Г¦Г ГІГЁГҐ ГЇГ°ГїГ¬Г® Г­Г  Г±ГІГ°ГҐГ«ГЄГі ГЇГ°ГЁГµГ®Г¤ГЁГІ
+        // Г®ГІГ¤ГҐГ«ГјГ­Г®, Г·ГҐГ°ГҐГ§ Г±Г®ГЎГ»ГІГЁГҐ Interacted (Г±Г¬. OnArrowInteracted).
         if (hasArrow)
         {
             if (arrow.AcceptsAnyPartOfBlock) arrow.Interact();
             return;
         }
 
-        // Без стрелки: толкание работает только у жёлтого блока
+        // ГЃГҐГ§ Г±ГІГ°ГҐГ«ГЄГЁ: ГІГ®Г«ГЄГ Г­ГЁГҐ Г°Г ГЎГ®ГІГ ГҐГІ ГІГ®Г«ГјГЄГ® Гі Г¦ВёГ«ГІГ®ГЈГ® ГЎГ«Г®ГЄГ 
         if (!IsYellow) return;
 
         Vector3 flatDir = new Vector3(playerLookDirection.x, 0, playerLookDirection.z).normalized;
@@ -153,7 +153,7 @@ public class YellowMovingBlock : MonoBehaviour
             _isMoving = false;
             _targetPosition = _rootObject.position;
 
-            // Важно: сохранить базовое состояние для синего блока
+            // Г‚Г Г¦Г­Г®: Г±Г®ГµГ°Г Г­ГЁГІГј ГЎГ Г§Г®ГўГ®ГҐ Г±Г®Г±ГІГ®ГїГ­ГЁГҐ Г¤Г«Гї Г±ГЁГ­ГҐГЈГ® ГЎГ«Г®ГЄГ 
             var blueBlock = GetComponent<BlueSizeBlock>();
             if (blueBlock != null) blueBlock.SaveBaseTransform();
             return;
@@ -172,7 +172,7 @@ public class YellowMovingBlock : MonoBehaviour
                 _rootObject.position = _targetPosition;
                 _isMoving = false;
 
-                // Важно: сохранить новую позицию для BlueSizeBlock
+                // Г‚Г Г¦Г­Г®: Г±Г®ГµГ°Г Г­ГЁГІГј Г­Г®ГўГіГѕ ГЇГ®Г§ГЁГ¶ГЁГѕ Г¤Г«Гї BlueSizeBlock
                 var blueBlock = GetComponent<BlueSizeBlock>();
                 if (blueBlock != null) blueBlock.SaveBaseTransform();
             }
@@ -184,11 +184,11 @@ public class YellowMovingBlock : MonoBehaviour
 
     private void ApplyGravity()
     {
-        // В первые кадры после загрузки сцены deltaTime бывает большим, ограничиваем шаг
+        // Г‚ ГЇГҐГ°ГўГ»ГҐ ГЄГ Г¤Г°Г» ГЇГ®Г±Г«ГҐ Г§Г ГЈГ°ГіГ§ГЄГЁ Г±Г¶ГҐГ­Г» deltaTime ГЎГ»ГўГ ГҐГІ ГЎГ®Г«ГјГёГЁГ¬, Г®ГЈГ°Г Г­ГЁГ·ГЁГўГ ГҐГ¬ ГёГ ГЈ
         float step = moveSpeed * Mathf.Min(Time.deltaTime, 0.05f);
 
-        // Тонкий бокс по размеру нижней грани блока, чуть выше самой грани (чтобы не
-        // пересекать пол, на котором блок стоит). Смотрим, сколько свободного места до пола.
+        // Г’Г®Г­ГЄГЁГ© ГЎГ®ГЄГ± ГЇГ® Г°Г Г§Г¬ГҐГ°Гі Г­ГЁГ¦Г­ГҐГ© ГЈГ°Г Г­ГЁ ГЎГ«Г®ГЄГ , Г·ГіГІГј ГўГ»ГёГҐ Г±Г Г¬Г®Г© ГЈГ°Г Г­ГЁ (Г·ГІГ®ГЎГ» Г­ГҐ
+        // ГЇГҐГ°ГҐГ±ГҐГЄГ ГІГј ГЇГ®Г«, Г­Г  ГЄГ®ГІГ®Г°Г®Г¬ ГЎГ«Г®ГЄ Г±ГІГ®ГЁГІ). Г‘Г¬Г®ГІГ°ГЁГ¬, Г±ГЄГ®Г«ГјГЄГ® Г±ГўГ®ГЎГ®Г¤Г­Г®ГЈГ® Г¬ГҐГ±ГІГ  Г¤Г® ГЇГ®Г«Г .
         Vector3 scale = _rootObject.localScale;
         Vector3 half = new Vector3(scale.x * 0.5f * 0.95f, 0.02f, scale.z * 0.5f * 0.95f);
         Vector3 origin = _rootObject.position + Vector3.down * (scale.y * 0.5f - GroundSkin - half.y);
@@ -196,7 +196,7 @@ public class YellowMovingBlock : MonoBehaviour
         int count = Physics.BoxCastNonAlloc(origin, half, Vector3.down, _groundHits, _rootObject.rotation,
                                             step + GroundSkin, wallMask, QueryTriggerInteraction.Ignore);
 
-        // Падаем не дальше пола: последний шаг укорачивается, и блок встаёт ровно на поверхность
+        // ГЏГ Г¤Г ГҐГ¬ Г­ГҐ Г¤Г Г«ГјГёГҐ ГЇГ®Г«Г : ГЇГ®Г±Г«ГҐГ¤Г­ГЁГ© ГёГ ГЈ ГіГЄГ®Г°Г Г·ГЁГўГ ГҐГІГ±Гї, ГЁ ГЎГ«Г®ГЄ ГўГ±ГІГ ВёГІ Г°Г®ГўГ­Г® Г­Г  ГЇГ®ГўГҐГ°ГµГ­Г®Г±ГІГј
         float fall = step;
         for (int i = 0; i < count; i++)
         {
@@ -207,8 +207,8 @@ public class YellowMovingBlock : MonoBehaviour
         if (fall > 0.0005f)
             _rootObject.position += Vector3.down * fall;
 
-        // Блок «стоит», цель движения = текущая позиция (иначе после падения стрелка,
-        // включённая позже, не смогла бы запустить блок: см. Update)
+        // ГЃГ«Г®ГЄ В«Г±ГІГ®ГЁГІВ», Г¶ГҐГ«Гј Г¤ГўГЁГ¦ГҐГ­ГЁГї = ГІГҐГЄГіГ№Г Гї ГЇГ®Г§ГЁГ¶ГЁГї (ГЁГ­Г Г·ГҐ ГЇГ®Г±Г«ГҐ ГЇГ Г¤ГҐГ­ГЁГї Г±ГІГ°ГҐГ«ГЄГ ,
+        // ГўГЄГ«ГѕГ·ВёГ­Г­Г Гї ГЇГ®Г§Г¦ГҐ, Г­ГҐ Г±Г¬Г®ГЈГ«Г  ГЎГ» Г§Г ГЇГіГ±ГІГЁГІГј ГЎГ«Г®ГЄ: Г±Г¬. Update)
         _targetPosition = _rootObject.position;
     }
 }

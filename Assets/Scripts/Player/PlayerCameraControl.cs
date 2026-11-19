@@ -14,17 +14,17 @@ public class PlayerCameraControl : MonoBehaviour
     [SerializeField] private float maxLookAngle = 85f; 
     [SerializeField] private bool lockCursor = true;
 
-    private float _xRotation = 0f;
+    public float _xRotation = 0f;
 
     private void Awake()
     {
         if (playerBody == null || cameraPivot == null)
         {
-            Debug.LogError("Не подключен трансформ у игрока!");
+            Debug.LogError("пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ!");
         }
         if (lookAction == null)
         {
-            Debug.LogError("Не подключено передвижение камеры!");
+            Debug.LogError("пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ!");
         }
     }
 

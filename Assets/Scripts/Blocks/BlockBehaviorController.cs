@@ -11,22 +11,22 @@ public class BlockBehaviorController : MonoBehaviour
     {
         _block = GetComponent<ColoredBlock>();
 
-        // Собираем ТОЛЬКО те скрипты поведения, которые есть на блоке
+        // РЎРѕР±РёСЂР°РµРј РўРћР›Р¬РљРћ С‚Рµ СЃРєСЂРёРїС‚С‹ РїРѕРІРµРґРµРЅРёСЏ, РєРѕС‚РѕСЂС‹Рµ РµСЃС‚СЊ РЅР° Р±Р»РѕРєРµ
         _behaviors.AddRange(GetComponentsInChildren<BlockBehavior>());
 
-        // При старте выключаем ВСЕ поведения (чтобы они не работали до смены цвета)
+        // РџСЂРё СЃС‚Р°СЂС‚Рµ РІС‹РєР»СЋС‡Р°РµРј Р’РЎР• РїРѕРІРµРґРµРЅРёСЏ (С‡С‚РѕР±С‹ РѕРЅРё РЅРµ СЂР°Р±РѕС‚Р°Р»Рё РґРѕ СЃРјРµРЅС‹ С†РІРµС‚Р°)
         foreach (var behavior in _behaviors)
         {
             behavior.enabled = false;
         }
     }
 
-    // Этот метод будет вызывать ColoredBlock при смене цвета
+    // Р­С‚РѕС‚ РјРµС‚РѕРґ Р±СѓРґРµС‚ РІС‹Р·С‹РІР°С‚СЊ ColoredBlock РїСЂРё СЃРјРµРЅРµ С†РІРµС‚Р°
     public void OnColorChanged(LensType newColor)
     {
         foreach (var behavior in _behaviors)
         {
-            // Включаем скрипт, только если его требуемый цвет совпадает с текущим
+            // Р’РєР»СЋС‡Р°РµРј СЃРєСЂРёРїС‚, С‚РѕР»СЊРєРѕ РµСЃР»Рё РµРіРѕ С‚СЂРµР±СѓРµРјС‹Р№ С†РІРµС‚ СЃРѕРІРїР°РґР°РµС‚ СЃ С‚РµРєСѓС‰РёРј
             behavior.enabled = (behavior.RequiredColor == newColor);
         }
     }

@@ -10,10 +10,10 @@ public abstract class BlockBehavior : MonoBehaviour
     {
         Block = GetComponent<ColoredBlock>();
         if (Block == null) Block = GetComponentInParent<ColoredBlock>();
-        enabled = false; // Выключаем при старте
+        enabled = false; // Р’С‹РєР»СЋС‡Р°РµРј РїСЂРё СЃС‚Р°СЂС‚Рµ
     }
 
-    // Вызывается из ColoredBlock при смене цвета
+    // Р’С‹Р·С‹РІР°РµС‚СЃСЏ РёР· ColoredBlock РїСЂРё СЃРјРµРЅРµ С†РІРµС‚Р°
     public virtual void OnColorChanged(LensType currentColor)
     {
         enabled = (currentColor == RequiredColor);
