@@ -1,0 +1,23 @@
+using UnityEngine;
+
+public class GreenDoubleJumpBlock : BlockBehavior
+{
+    public override LensType RequiredColor => LensType.Green;
+
+    // OnTriggerStay ����������� ������ ����, ���� ����� ������ ��������
+    private void OnTriggerStay(Collider other)
+    {
+        if (enabled) return;
+
+        if (other.CompareTag("Player"))
+        {
+            var playerMovement = other.GetComponent<PlayerMovement>();
+            if (playerMovement != null)
+            {
+                playerMovement.AddExtraJump();
+                print("hi");
+                Debug.Log("[GreenBlock] ������ ����� ������� ������!");
+            }
+        }
+    }
+}

@@ -14,8 +14,19 @@ public class PlayerCameraControl : MonoBehaviour
     [SerializeField] private float maxLookAngle = 85f; 
     [SerializeField] private bool lockCursor = true;
 
-    private float _xRotation = 0f;
+    public float _xRotation = 0f;
 
+    private void Awake()
+    {
+        if (playerBody == null || cameraPivot == null)
+        {
+            Debug.LogError("�� ��������� ��������� � ������!");
+        }
+        if (lookAction == null)
+        {
+            Debug.LogError("�� ���������� ������������ ������!");
+        }
+    }
 
     private void OnEnable() => lookAction.action.Enable();
     private void OnDisable() => lookAction.action.Disable();

@@ -1,0 +1,79 @@
+using System.Collections.Generic;
+using UnityEngine;
+
+[RequireComponent(typeof(Collider))]
+public class ColoredBlock : MonoBehaviour
+{
+    public static readonly List<ColoredBlock> AllBlocks = new List<ColoredBlock>();
+
+    [Header("Р¦РІРµС‚Р°")]
+    public LensType baseColor = LensType.Red;
+    [HideInInspector] public LensType currentColor = LensType.Red;
+
+    [Header("РќР°СЃС‚СЂРѕР№РєРё")]
+    public bool makePassable = true;
+    [SerializeField] private List<GameObject> disapearingComponents = new List<GameObject>();
+
+    [SerializeField] private LensMixTable mixTable;
+
+    private Collider _col;
+    private Renderer _rend;
+    private GameObject _child;
+
+    private void Awake()
+    {
+        _col = GetComponent<Collider>();
+        _rend = GetComponent<Renderer>();
+        _child = transform.GetChild(0).gameObject;
+        if (mixTable == null) mixTable = FindAnyObjectByType<LensMixTable>();
+    }
+
+    private void OnEnable() => AllBlocks.Add(this);
+    private void OnDisable() => AllBlocks.Remove(this);
+
+    private void Start()
+    {
+        ApplyColor(baseColor, LensType.None);
+    }
+
+    public void ReactToLens(LensType lensColor)
+    {
+        LensType newColor = mixTable != null ? mixTable.Mix(baseColor, lensColor) : baseColor;
+        ApplyColor(newColor, lensColor);
+    }
+
+    private void ApplyColor(LensType newColor, LensType lensColor)
+    {
+        currentColor = newColor;
+
+        bool isPassable = makePassable && (lensColor == baseColor) && (lensColor != LensType.None);
+        //gameObject.SetActive(!isPassable);
+        if (_col != null) _col.enabled = !isPassable;
+        if (_rend != null) _rend.enabled = !isPassable;
+        if (_child != null)
+        {
+            var childCol = _child.GetComponent<Collider>();
+            if (childCol != null) childCol.enabled = !isPassable;
+            var childRend = _child.GetComponent<Renderer>();
+            if (childRend != null) childRend.enabled = !isPassable;
+            if (disapearingComponents != null)
+            {
+                //скорей всего это очень сильно наргружает код, но пока не определимся с количеством внутренних компонентов это будет тут.
+                foreach (var dobj_ in disapearingComponents)
+                {
+                    dobj_.SetActive(!isPassable);
+                }
+            }
+        }
+
+        // РќР°С…РѕРґРёРј РІСЃРµ СЃРєСЂРёРїС‚С‹ РїРѕРІРµРґРµРЅРёСЏ РЅР° Р±Р»РѕРєРµ Рё РЅР° РµРіРѕ РґРѕС‡РµСЂРЅРёС… РѕР±СЉРµРєС‚Р°С… (РґР»СЏ С‚СЂРёРіРіРµСЂРѕРІ)
+        var behaviors = GetComponentsInChildren<BlockBehavior>(true);
+        foreach (var behavior in behaviors)
+        {
+            behavior.OnColorChanged(currentColor);
+        }
+    }
+
+    public Bounds GetBounds() => _rend != null ? _rend.bounds : new Bounds(transform.position, Vector3.one);
+    public void ResetToBaseState() => ApplyColor(baseColor, LensType.None);
+}

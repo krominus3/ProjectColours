@@ -1,0 +1,57 @@
+{
+    "version": 1,
+    "name": "LensChangeScroll",
+    "maps": [
+        {
+            "name": "LensChange",
+            "id": "32134a0e-4036-4b19-80f4-d20999fa8e37",
+            "actions": [
+                {
+                    "name": "ScrollLens",
+                    "type": "PassThrough",
+                    "id": "7f0c4046-6e91-42f0-b677-a39a01635d75",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "1D Axis",
+                    "id": "58df3cef-b4ef-4ab4-811f-e05e00cb1890",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ScrollLens",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "9c2602d3-59c5-4aec-ae6a-272baac3a604",
+                    "path": "<Mouse>/scroll/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ScrollLens",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "cc974778-1d1d-4358-a88c-43688d208505",
+                    "path": "<Mouse>/scroll/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ScrollLens",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

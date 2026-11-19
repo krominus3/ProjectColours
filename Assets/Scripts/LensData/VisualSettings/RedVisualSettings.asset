@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c117e4e4c7837cf4db8d8b3d0b827121, type: 3}
+  m_Name: RedVisualSettings
+  m_EditorClassIdentifier: Assembly-CSharp::LensVisualSettings
+  type: 1
+  saturation: -40
+  contrast: 15
+  postExposure: 0
+  hueShift: 0
+  colorFilter: {r: 1, g: 0.7, b: 0.7, a: 1}
+  redR: 140
+  greenG: 70
+  blueB: 70
+  redG: 40
+  redB: 40
+  greenR: 0
+  greenB: 0
+  blueR: 0
+  blueG: 0
+  vignetteIntensity: 0.35
+  vignetteColor: {r: 0.3, g: 0, b: 0, a: 1}
+  bloomIntensity: 0.1
+  distortion: -0.1
+  transitionDuration: 0.35

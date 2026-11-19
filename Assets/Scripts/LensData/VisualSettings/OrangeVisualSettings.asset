@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c117e4e4c7837cf4db8d8b3d0b827121, type: 3}
+  m_Name: OrangeVisualSettings
+  m_EditorClassIdentifier: Assembly-CSharp::LensVisualSettings
+  type: 6
+  saturation: 20
+  contrast: 5
+  postExposure: 0
+  hueShift: 0
+  colorFilter: {r: 1, g: 0.85845363, b: 0.7490196, a: 1}
+  redR: 130
+  greenG: 61
+  blueB: 0
+  redG: 68
+  redB: 0
+  greenR: 71
+  greenB: 1
+  blueR: 71
+  blueG: 68
+  vignetteIntensity: 0.15
+  vignetteColor: {r: 0.2, g: 0.08627669, b: 0, a: 1}
+  bloomIntensity: 0.35
+  distortion: 0
+  transitionDuration: 0.35
