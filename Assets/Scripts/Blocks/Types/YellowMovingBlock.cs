@@ -109,7 +109,7 @@ public class YellowMovingBlock : MonoBehaviour
         // îòäåëüíî, ÷åðåç ñîáûòèå Interacted (ñì. OnArrowInteracted).
         if (hasArrow)
         {
-            if (arrow.AcceptsAnyPartOfBlock) arrow.Interact();
+            if (arrow.AcceptsAnyPartOfBlock) arrow.Interact(hitPoint);
             return;
         }
 

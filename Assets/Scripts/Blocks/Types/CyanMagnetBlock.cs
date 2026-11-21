@@ -1,42 +1,42 @@
 using UnityEngine;
 
 /// <summary>
-/// Бирюзовый цвет: магнит. Луч притягивает или отталкивает «магнитные» объекты.
-/// Направление луча задаёт DirectionArrow (та же стрелка, что у жёлтого блока).
-/// Притяжение / отталкивание задают угловые стрелки (SizeArrowGroup):
-///   стрелки внутрь  = притяжение,
-///   стрелки наружу  = отталкивание.
-/// Работает, только пока блок бирюзовый.
-/// Магнитными считаются объекты с тегом magneticTag, а также игрок (CharacterController).
+/// Р“РѕР»СѓР±РѕР№ Р±Р»РѕРє: РјР°РіРЅРёС‚. РћРЅ РїСЂРёС‚СЏРіРёРІР°РµС‚ РёР»Рё РѕС‚С‚Р°Р»РєРёРІР°РµС‚ РјР°РіРЅРёС‚РЅС‹Рµ РѕР±СЉРµРєС‚С‹.
+/// Р’СЂР°С‰Р°РµС‚СЃСЏ РІРІРµСЂС… С‡РµСЂРµР· DirectionArrow (РЅРµ СЃР°Рј РїРѕ СЃРµР±Рµ, РєР°Рє РІ РґСЂСѓРіРёС… Р±Р»РѕРєР°С…).
+/// РџСЂРёС‚СЏРіРёРІР°РµС‚ / РѕС‚С‚Р°Р»РєРёРІР°РµС‚ РІРґРѕР»СЊ СЃС‚СЂРµР»РєРё (SizeArrowGroup):
+///   СЃС‚СЂРµР»РєР° РЅР°СЂСѓР¶Сѓ = РїСЂРёС‚СЏРіРёРІР°РµС‚,
+///   СЃС‚СЂРµР»РєР° РІРЅСѓС‚СЂСЊ = РѕС‚С‚Р°Р»РєРёРІР°РµС‚.
+/// Р’РЅРёРјР°РЅРёРµ, СЃС‚СЂРµР»РєР° РјРѕР¶РµС‚ Р±С‹С‚СЊ РѕС‚РєР»СЋС‡РµРЅР°.
+/// РџСЂРёС‚СЏРіРёРІР°РµС‚ РѕР±СЉРµРєС‚С‹ СЃ С‚РµРіРѕРј magneticTag, Р° С‚Р°РєР¶Рµ РёРіСЂРѕРєР° (CharacterController).
 /// </summary>
 public class CyanMagnetBlock : MonoBehaviour
 {
-    [Header("Параметры магнита")]
+    [Header("РџР°СЂР°РјРµС‚СЂС‹ РјР°РіРЅРёС‚Р°")]
     [SerializeField] private float maxDistance = 10f;
-    [Tooltip("Сила для объектов с Rigidbody (ForceMode.Force).")]
+    [Tooltip("РЎРёР»Р° РґР»СЏ РѕР±СЉРµРєС‚РѕРІ СЃ Rigidbody (ForceMode.Force).")]
     [SerializeField] private float magnetForce = 15f;
-    [Tooltip("Скорость, с которой магнит тянет / толкает игрока (CharacterController), ед/сек.")]
+    [Tooltip("РЎРєРѕСЂРѕСЃС‚СЊ, СЃ РєРѕС‚РѕСЂРѕР№ РёРіСЂРѕРє С‚СЏРЅРµС‚СЃСЏ / С‚РѕР»РєР°РµС‚СЃСЏ (CharacterController), Рј/СЃ.")]
     [SerializeField] private float playerSpeed = 8f;
     [SerializeField] private string magneticTag = "Magnetic";
-    [Tooltip("Действует ли магнит на игрока (у игрока тег Player, а не Magnetic, поэтому отдельная опция).")]
+    [Tooltip("РџСЂРёРјРµРЅСЏС‚СЊ Р»Рё СЌС„С„РµРєС‚ Рє РёРіСЂРѕРєСѓ (РІ СЂРµР¶РёРјРµ Player, Р° РЅРµ Magnetic, РєРѕС‚РѕСЂС‹Р№ РїСЂРёС‚СЏРіРёРІР°РµС‚ РІСЃС‘).")]
     [SerializeField] private bool affectPlayer = true;
     [SerializeField] private LayerMask hitMask = ~0;
 
-    [Header("Стрелки")]
-    [Tooltip("Стрелка направления (та же, что у жёлтого блока). Если не задана — ищется среди дочерних объектов. " +
-             "Без активной стрелки луч идёт вперёд (transform.forward этого объекта).")]
+    [Header("РЎС‚СЂРµР»РєР°")]
+    [Tooltip("РЎС‚СЂРµР»РєР° РЅР°РїСЂР°РІР»РµРЅРёСЏ (С‚Р° Р¶Рµ, С‡С‚Рѕ Рё Сѓ Р¶С‘Р»С‚РѕРіРѕ Р±Р»РѕРєР°). Р•СЃР»Рё РµС‘ РЅРµС‚ вЂ” Р±РµСЂС‘С‚СЃСЏ РёР· РєРѕСЂРЅСЏ Р±Р»РѕРєР° Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРё. " +
+             "Р”Р»СЏ РјР°РіРЅРёС‚Р° РІР°Р¶РЅР° РєР°Рє СЂР°Р· РѕРЅР° (transform.forward РјРѕР¶РµС‚ РѕС‚Р»РёС‡Р°С‚СЊСЃСЏ).")]
     [SerializeField] private DirectionArrow directionArrow;
-    [Tooltip("Группа угловых стрелок. Если пусто — ищется среди дочерних объектов. " +
-             "Внутрь = притяжение, наружу = отталкивание.")]
+    [Tooltip("Р“СЂСѓРїРїР° СЃС‚СЂРµР»РѕРє СЂР°Р·РјРµСЂР°. Р•СЃР»Рё РЅРµС‚ вЂ” РёС‰РµС‚СЃСЏ РІ РєРѕСЂРЅРµ Р±Р»РѕРєР° Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРё. " +
+             "РќР°СЂСѓР¶Сѓ = РїСЂРёС‚СЏРіРёРІР°РµС‚, РІРЅСѓС‚СЂСЊ = РѕС‚С‚Р°Р»РєРёРІР°РµС‚.")]
     [SerializeField] private SizeArrowGroup arrowGroup;
-    [Tooltip("Используется, только если на блоке нет группы угловых стрелок.")]
+    [Tooltip("РР·РЅР°С‡Р°Р»СЊРЅРѕ, С‚СЏРЅРµС‚ Р±Р»РѕРє Рє СЃРµР±Рµ РёР»Рё С‚РѕР»РєР°РµС‚ РѕС‚ СЃРµР±СЏ.")]
     [SerializeField] private bool isAttracting = true;
 
-    [Header("Визуал")]
+    [Header("Р›СѓС‡")]
     [SerializeField] private LineRenderer lineRenderer;
 
-    // Небольшое прижатие к земле, чтобы горизонтальные толчки магнита не сбивали
-    // CharacterController.isGrounded (он берётся из последнего вызова Move).
+    // РќРµР±РѕР»СЊС€РѕРµ СЃРјРµС‰РµРЅРёРµ РІРЅРёР·, С‡С‚РѕР±С‹ РєРѕРјРїРµРЅСЃРёСЂРѕРІР°С‚СЊ РїРѕС‚РµСЂСЋ РєРѕРЅС‚Р°РєС‚Р° СЃ Р·РµРјР»С‘Р№
+    // CharacterController.isGrounded (РѕРЅ С‚РµСЂСЏРµС‚СЃСЏ РІРѕ РІСЂРµРјСЏ РІС‹Р·РѕРІР° Move).
     private const float GroundStick = 0.01f;
 
     private ColoredBlock _block;
@@ -79,7 +79,7 @@ public class CyanMagnetBlock : MonoBehaviour
         if (lineRenderer != null) lineRenderer.enabled = active;
         if (!active) return;
 
-        Vector3 dir = BeamDirection;
+        Vector3 dir = directionArrow.ForwardDirection;
         Vector3 origin = _root.position;
         Vector3 end = origin + dir * maxDistance;
 
@@ -99,7 +99,7 @@ public class CyanMagnetBlock : MonoBehaviour
         }
     }
 
-    /// <summary>Ближайшее препятствие на пути луча. Свои коллайдеры блока и триггеры не в счёт.</summary>
+    /// <summary>Р‘Р»РёР¶Р°Р№С€РµРµ РїСЂРµРїСЏС‚СЃС‚РІРёРµ РЅР° РїСѓС‚Рё Р»СѓС‡Р°. Р•СЃР»Рё РїРѕРїР°РґР°РЅРёРµ РІ С‚СЂРёРіРіРµСЂ вЂ” РёРіРЅРѕСЂРёСЂСѓРµРј РµРіРѕ Рё РёРґС‘Рј РґР°Р»СЊС€Рµ.</summary>
     private bool CastBeam(Vector3 origin, Vector3 dir, out RaycastHit best)
     {
         best = default;
@@ -130,17 +130,17 @@ public class CyanMagnetBlock : MonoBehaviour
 
     private void ApplyForce(RaycastHit hit, Vector3 dir)
     {
-        // dir — от магнита к цели. Притяжение — к магниту (-dir), отталкивание — от него (+dir).
+        // dir вЂ” РѕС‚ РјР°РіРЅРёС‚Р° Рє С†РµР»Рё. РџСЂРёС‚СЏРіРёРІР°РµРј вЂ” РІ СЃС‚РѕСЂРѕРЅСѓ РјР°РіРЅРёС‚Р° (-dir), РѕС‚С‚Р°Р»РєРёРІР°РµРј вЂ” РѕС‚ РјР°РіРЅРёС‚Р° (+dir).
         Vector3 pull = Attracting ? -dir : dir;
 
-        // Физические объекты
+        // РњР°РіРЅРёС‚РЅС‹Рµ РѕР±СЉРµРєС‚С‹
         if (hit.rigidbody != null && !hit.rigidbody.isKinematic)
         {
             hit.rigidbody.AddForce(pull * magnetForce, ForceMode.Force);
             return;
         }
 
-        // Игрок на CharacterController
+        // РРіСЂРѕРє РЅР° CharacterController
         var controller = hit.collider.GetComponentInParent<CharacterController>();
         if (controller != null && controller.enabled)
         {

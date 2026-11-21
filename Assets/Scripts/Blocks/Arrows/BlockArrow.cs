@@ -1,27 +1,28 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
-/// Основа всех стрелок на блоках: состояние, видимость и взаимодействие.
-/// Зона взаимодействия — коллайдер самой стрелки: куда игрок целится, ту стрелку и нажимает.
-/// Коллайдер масштабируется вместе с блоком, поэтому стрелки работают при любом размере блока.
-/// Конкретное поведение задают наследники (OnInteract) и владелец блока (событие Interacted).
+/// РћСЃРЅРѕРІР° РІСЃРµС… СЃС‚СЂРµР»РѕРє РЅР° Р±Р»РѕРєР°С…: СЃРѕСЃС‚РѕСЏРЅРёРµ, РІРёРґРёРјРѕСЃС‚СЊ Рё РІР·Р°РёРјРѕРґРµР№СЃС‚РІРёРµ.
+/// Р—РѕРЅР° РІР·Р°РёРјРѕРґРµР№СЃС‚РІРёСЏ вЂ” РєРѕР»Р»Р°Р№РґРµСЂ СЃР°РјРѕР№ СЃС‚СЂРµР»РєРё: РєСѓРґР° РёРіСЂРѕРє С†РµР»РёС‚СЃСЏ, С‚Сѓ СЃС‚СЂРµР»РєСѓ Рё РЅР°Р¶РёРјР°РµС‚.
+/// РљРѕР»Р»Р°Р№РґРµСЂ РјР°СЃС€С‚Р°Р±РёСЂСѓРµС‚СЃСЏ РІРјРµСЃС‚Рµ СЃ Р±Р»РѕРєРѕРј, РїРѕСЌС‚РѕРјСѓ СЃС‚СЂРµР»РєРё СЂР°Р±РѕС‚Р°СЋС‚ РїСЂРё Р»СЋР±РѕРј СЂР°Р·РјРµСЂРµ Р±Р»РѕРєР°.
+/// РљРѕРЅРєСЂРµС‚РЅРѕРµ РїРѕРІРµРґРµРЅРёРµ Р·Р°РґР°СЋС‚ РЅР°СЃР»РµРґРЅРёРєРё (OnInteract) Рё РІР»Р°РґРµР»РµС† Р±Р»РѕРєР° (СЃРѕР±С‹С‚РёРµ Interacted).
 /// </summary>
 public abstract class BlockArrow : MonoBehaviour
 {
-    [Header("Состояние")]
-    [Tooltip("Активна ли стрелка. Выключенная стрелка скрыта и не реагирует на взаимодействие.")]
+    [Header("РЎРѕСЃС‚РѕСЏРЅРёРµ")]
+    [Tooltip("РђРєС‚РёРІРЅР° Р»Рё СЃС‚СЂРµР»РєР°. Р’С‹РєР»СЋС‡РµРЅРЅР°СЏ СЃС‚СЂРµР»РєР° СЃРєСЂС‹С‚Р° Рё РЅРµ СЂРµР°РіРёСЂСѓРµС‚ РЅР° РІР·Р°РёРјРѕРґРµР№СЃС‚РІРёРµ.")]
     public bool isActive = true;
 
-    [Header("Визуал")]
-    [Tooltip("Модель стрелки. Если не задана, при выключении стрелки отключается весь её объект.")]
-    [SerializeField] protected GameObject visualObject;
+    [Header("Р’РёР·СѓР°Р»")]
+    [Tooltip("РњРѕРґРµР»СЊ СЃС‚СЂРµР»РєРё. Р•СЃР»Рё РЅРµ Р·Р°РґР°РЅР°, РїСЂРё РІС‹РєР»СЋС‡РµРЅРёРё СЃС‚СЂРµР»РєРё РѕС‚РєР»СЋС‡Р°РµС‚СЃСЏ РІРµСЃСЊ РµС‘ РѕР±СЉРµРєС‚.")]
+    [SerializeField] protected Renderer visualObject;
 
-    /// <summary>Вызывается после того, как игрок нажал на стрелку.</summary>
+    /// <summary>Р’С‹Р·С‹РІР°РµС‚СЃСЏ РїРѕСЃР»Рµ С‚РѕРіРѕ, РєР°Рє РёРіСЂРѕРє РЅР°Р¶Р°Р» РЅР° СЃС‚СЂРµР»РєСѓ.</summary>
     public event Action<BlockArrow> Interacted;
 
     /// <summary>
-    /// true — стрелка реагирует и на взаимодействие с любой частью блока, а не только на прицеливание в неё.
+    /// true вЂ” СЃС‚СЂРµР»РєР° СЂРµР°РіРёСЂСѓРµС‚ Рё РЅР° РІР·Р°РёРјРѕРґРµР№СЃС‚РІРёРµ СЃ Р»СЋР±РѕР№ С‡Р°СЃС‚СЊСЋ Р±Р»РѕРєР°, Р° РЅРµ С‚РѕР»СЊРєРѕ РЅР° РїСЂРёС†РµР»РёРІР°РЅРёРµ РІ РЅРµС‘.
     /// </summary>
     public virtual bool AcceptsAnyPartOfBlock => false;
 
@@ -30,11 +31,11 @@ public abstract class BlockArrow : MonoBehaviour
         UpdateVisibility();
 
         if (!AcceptsAnyPartOfBlock && GetComponentInChildren<Collider>(true) == null)
-            Debug.LogWarning($"[{name}] У стрелки нет коллайдера: в неё нельзя прицелиться. " +
-                             "Добавь BoxCollider (Is Trigger), чуть выступающий над гранью блока.", this);
+            Debug.LogWarning($"[{name}] Сѓ СЃС‚СЂРµР»РєРё РЅРµС‚ РєРѕР»Р»Р°Р№РґРµСЂР°: РІ РЅРµС‘ РЅРµР»СЊР·СЏ РїСЂРёС†РµР»РёС‚СЊСЃСЏ. " +
+                             "Р”РѕР±Р°РІСЊ BoxCollider (Is Trigger), С‡СѓС‚СЊ РІС‹СЃС‚СѓРїР°СЋС‰РёР№ РЅР°Рґ РіСЂР°РЅСЊСЋ Р±Р»РѕРєР°.", this);
     }
 
-    /// <summary>Включить или выключить стрелку (например, из переключателя).</summary>
+    /// <summary>Р’РєР»СЋС‡РёС‚СЊ РёР»Рё РІС‹РєР»СЋС‡РёС‚СЊ СЃС‚СЂРµР»РєСѓ (РЅР°РїСЂРёРјРµСЂ, РёР· РїРµСЂРµРєР»СЋС‡Р°С‚РµР»СЏ).</summary>
     public void SetActive(bool state)
     {
         isActive = state;
@@ -44,18 +45,24 @@ public abstract class BlockArrow : MonoBehaviour
     protected void UpdateVisibility()
     {
         if (visualObject != null)
-            visualObject.SetActive(isActive);
+        {
+            visualObject.gameObject.SetActive(isActive);
+            visualObject.enabled = isActive;
+        }
         else
+        {
             gameObject.SetActive(isActive);
+            //gameObject.GetComponent<Renderer>().enabled = isActive;
+        }
     }
 
-    /// <summary>Нажатие игрока на стрелку.</summary>
-    public void Interact()
+    /// <summary>РќР°Р¶Р°С‚РёРµ РёРіСЂРѕРєР° РЅР° СЃС‚СЂРµР»РєСѓ.</summary>
+    public void Interact(Vector3 hitPoint)
     {
         if (!isActive) return;
-        OnInteract();
+        OnInteract(hitPoint);
         Interacted?.Invoke(this);
     }
 
-    protected virtual void OnInteract() { }
+    protected virtual void OnInteract(Vector3 hitPoint) { }
 }

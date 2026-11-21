@@ -6,8 +6,8 @@ using UnityEngine.InputSystem;
 
 public class GameSaver : MonoBehaviour
 {
-    public List<SaveObj> objsData;
-    public List<SavePlayerData> playerData;
+    public List<SaveObj> objsData = new();
+    public List<SavePlayerData> playerData = new();
 
     [SerializeField] private LensInventory inventory;
     [SerializeField] private InputActionReference saveAction;

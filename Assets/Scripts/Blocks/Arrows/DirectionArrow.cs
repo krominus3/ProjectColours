@@ -1,28 +1,55 @@
+using System;
+using NaughtyAttributes;
+using Unity.Mathematics;
+using Unity.Properties;
 using UnityEngine;
 using UnityEngine.Serialization;
 
 /// <summary>
-/// Стрелка направления на жёлтом блоке.
-/// Вращается по взаимодействию (E) независимо от цвета блока и того, движется ли он.
-/// Движением занимается YellowMovingBlock (подписан на событие Interacted).
+/// РЎС‚СЂРµР»РєР° РЅР°РїСЂР°РІР»РµРЅРёСЏ РЅР° Р¶С‘Р»С‚РѕРј Р±Р»РѕРєРµ.
+/// Р’СЂР°С‰Р°РµС‚СЃСЏ РїРѕ РІР·Р°РёРјРѕРґРµР№СЃС‚РІРёСЋ (E) РЅРµР·Р°РІРёСЃРёРјРѕ РѕС‚ С†РІРµС‚Р° Р±Р»РѕРєР° Рё С‚РѕРіРѕ, РґРІРёР¶РµС‚СЃСЏ Р»Рё РѕРЅ.
+/// Р”РІРёР¶РµРЅРёРµРј Р·Р°РЅРёРјР°РµС‚СЃСЏ YellowMovingBlock (РїРѕРґРїРёСЃР°РЅ РЅР° СЃРѕР±С‹С‚РёРµ Interacted).
 /// </summary>
 public class DirectionArrow : BlockArrow
 {
-    [Header("Взаимодействие")]
-    [Tooltip("Выключено: стрелка реагирует на любую часть блока. " +
-             "Включено: только если игрок целится в саму стрелку (нужен коллайдер на стрелке).")]
+    [Header("Р’Р·Р°РёРјРѕРґРµР№СЃС‚РІРёРµ")]
+    [Tooltip("Р’С‹РєР»СЋС‡РµРЅРѕ: СЃС‚СЂРµР»РєР° СЂРµР°РіРёСЂСѓРµС‚ РЅР° Р»СЋР±СѓСЋ С‡Р°СЃС‚СЊ Р±Р»РѕРєР°. " +
+             "Р’РєР»СЋС‡РµРЅРѕ: С‚РѕР»СЊРєРѕ РµСЃР»Рё РёРіСЂРѕРє С†РµР»РёС‚СЃСЏ РІ СЃР°РјСѓ СЃС‚СЂРµР»РєСѓ (РЅСѓР¶РµРЅ РєРѕР»Р»Р°Р№РґРµСЂ РЅР° СЃС‚СЂРµР»РєРµ).")]
     [FormerlySerializedAs("requireAimNearArrow")]
     [SerializeField] private bool requireAimAtArrow = false;
-
-    [Header("Поворот")]
-    [SerializeField] private float rotationStep = 90f;
+    [Header("Р’С‹Р±РѕСЂ РЅР°РїСЂР°РІР»РµРЅРёСЏ")]
+    [Dropdown("GetVectorValues"),SerializeField,OnValueChanged("SetRotation")]
+    private Vector3 dir = Vector3.up;
+    private DropdownList<Vector3> GetVectorValues()
+    {
+        return new DropdownList<Vector3>()
+        {
+            {"Up", Vector3.up},
+            {"Down", Vector3.down},
+            {"Right", Vector3.right},
+            {"Left", Vector3.left},
+            {"Forward", Vector3.forward},
+            {"Back", Vector3.back}
+        };
+    }
 
     public override bool AcceptsAnyPartOfBlock => !requireAimAtArrow;
 
-    protected override void OnInteract()
-    {
-        transform.Rotate(0f, rotationStep, 0f, Space.Self);
+    protected override void OnInteract(Vector3 hitPoint) 
+    {   
+        var hitSide = hitPoint-transform.position;
+        dir = Vector3.zero;
+        if(math.abs(hitSide.x)>math.abs(hitSide.y) && math.abs(hitSide.x)>math.abs(hitSide.z))
+            dir.x = MathF.Sign(hitSide.x);
+        else if(math.abs(hitSide.y)>math.abs(hitSide.x) && math.abs(hitSide.y)>math.abs(hitSide.z))
+            dir.y = MathF.Sign(hitSide.y);
+        else
+            dir.z = MathF.Sign(hitSide.z);
+        print(dir);
+        SetRotation();
     }
 
-    public Vector3 ForwardDirection => transform.forward;
+    private void SetRotation() => transform.localEulerAngles = new Vector3(dir.z*90f-dir.y*90f+Mathf.Abs(dir.y*90f),0,-dir.x*90f);
+
+    public Vector3 ForwardDirection => dir;
 }

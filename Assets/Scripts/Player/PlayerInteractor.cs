@@ -4,11 +4,11 @@ using UnityEngine.InputSystem;
 
 public class PlayerInteractor : MonoBehaviour
 {
-    [Header("Настройки")]
+    [Header("РќР°СЃС‚СЂРѕР№РєРё")]
     [SerializeField] private float interactDistance = 3f;
     [SerializeField] private InputActionReference interactAction;
-    [Tooltip("Насколько глубоко за поверхностью блока ещё засчитывается коллайдер стрелки " +
-             "(на случай, если он утоплен в грань).")]
+    [Tooltip("РќР°СЃРєРѕР»СЊРєРѕ РіР»СѓР±РѕРєРѕ Р·Р° РїРѕРІРµСЂС…РЅРѕСЃС‚СЊСЋ Р±Р»РѕРєР° РµС‰С‘ Р·Р°СЃС‡РёС‚С‹РІР°РµС‚СЃСЏ РєРѕР»Р»Р°Р№РґРµСЂ СЃС‚СЂРµР»РєРё " +
+             "(РЅР° СЃР»СѓС‡Р°Р№, РµСЃР»Рё РѕРЅ СѓС‚РѕРїР»РµРЅ РІ РіСЂР°РЅСЊ).")]
     [SerializeField] private float arrowDepthTolerance = 0.1f;
 
     private readonly RaycastHit[] _hits = new RaycastHit[16];
@@ -34,9 +34,9 @@ public class PlayerInteractor : MonoBehaviour
         int count = Physics.RaycastNonAlloc(ray, _hits, interactDistance, ~0, QueryTriggerInteraction.Collide);
         System.Array.Sort(_hits, 0, count, ByDistance);
 
-        // 1. Ближайшая твёрдая поверхность: через неё взаимодействовать нельзя.
-        //    Свои коллайдеры игрока, стрелки и ЛЮБЫЕ триггеры (в том числе большой Trigger блока,
-        //    плиты, лазеры, зоны) не мешают.
+		// 1. Р‘Р»РёР¶Р°Р№С€Р°СЏ С‚РІС‘СЂРґР°СЏ РїРѕРІРµСЂС…РЅРѕСЃС‚СЊ: С‡РµСЂРµР· РЅРµС‘ РІР·Р°РёРјРѕРґРµР№СЃС‚РІРѕРІР°С‚СЊ РЅРµР»СЊР·СЏ.
+		//    РЎРІРѕРё РєРѕР»Р»Р°Р№РґРµСЂС‹ РёРіСЂРѕРєР°, СЃС‚СЂРµР»РєРё Рё Р›Р®Р‘Р«Р• С‚СЂРёРіРіРµСЂС‹ (РІ С‚РѕРј С‡РёСЃР»Рµ Р±РѕР»СЊС€РѕР№ Trigger Р±Р»РѕРєР°,
+		//    РїР»РёС‚С‹, Р»Р°Р·РµСЂС‹, Р·РѕРЅС‹) РЅРµ РјРµС€Р°СЋС‚.
         float solidDistance = interactDistance;
         int solidIndex = -1;
         for (int i = 0; i < count; i++)
@@ -51,7 +51,7 @@ public class PlayerInteractor : MonoBehaviour
             break;
         }
 
-        // 2. Стрелка, в которую целится игрок (ближайшая из тех, что не за стеной)
+        // 2. РЎС‚СЂРµР»РєР°, РІ РєРѕС‚РѕСЂСѓСЋ С†РµР»РёС‚СЃСЏ РёРіСЂРѕРє (Р±Р»РёР¶Р°Р№С€Р°СЏ РёР· С‚РµС…, С‡С‚Рѕ РЅРµ Р·Р° СЃС‚РµРЅРѕР№)
         for (int i = 0; i < count; i++)
         {
             if (_hits[i].distance > solidDistance + arrowDepthTolerance) break;
@@ -62,15 +62,14 @@ public class PlayerInteractor : MonoBehaviour
             var arrow = col.GetComponentInParent<BlockArrow>();
             if (arrow != null && arrow.isActive)
             {
-                arrow.Interact();
+                arrow.Interact(_hits[i].point);
                 return;
             }
         }
 
-        // 3. Сам блок (толкание жёлтого блока без стрелки и т.п.)
+		// 3. РЎР°Рј Р±Р»РѕРє (С‚РѕР»РєР°РЅРёРµ Р¶С‘Р»С‚РѕРіРѕ Р±Р»РѕРєР° Р±РµР· СЃС‚СЂРµР»РєРё Рё С‚.Рї.)
         if (solidIndex < 0) return;
-
-        // Логика цвета может висеть на дочернем объекте Trigger, поэтому ищем её от корня блока
+		//    Р›РѕРіРёРєР° С†РІРµС‚Р° РјРѕР¶РµС‚ РІРёСЃРµС‚СЊ РЅР° РґРѕС‡РµСЂРЅРµРј РѕР±СЉРµРєС‚Рµ Trigger, РїРѕСЌС‚РѕРјСѓ РёС‰РµРј РµС‘ РѕС‚ РєРѕСЂРЅСЏ Р±Р»РѕРєР°
         Collider solid = _hits[solidIndex].collider;
         var yellowBlock = solid.GetComponentInParent<YellowMovingBlock>();
         if (yellowBlock == null)
